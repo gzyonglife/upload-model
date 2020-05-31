@@ -13,4 +13,6 @@ debug: true
 logging:
   level:
     org.springframework.security: debug
-# redis
+app:
+  jwtSecret: JWTSuperSecretKey
+  jwtExpirationInMs: 604800000

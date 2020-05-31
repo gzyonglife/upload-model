@@ -4,6 +4,7 @@ import com.jinlong.uploadmodel.entity.dto.UserTable;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -22,21 +23,21 @@ public class JwtTokenUtils {
 
     private static final String ROLE_CLAIMS = "rol";
 
-    public static String generateJsonWebToken(UserTable user) {
+    public static String generateJsonWebToken(UserDetails  user) {
 
-        if (user.getUserId() == null || user.getUserName() == null) {
+        if (user.getAuthorities() == null || user.getUsername() == null) {
             return null;
         }
 
-        Map<String,Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         map.put(ROLE_CLAIMS, "rol");
 
         String token = Jwts
                 .builder()
                 .setSubject(SUBJECT)
                 .setClaims(map)
-                .claim("id", user.getUserId())
-                .claim("name", user.getUserName())
+                .claim("authorities", user.getAuthorities())
+                .claim("name", user.getUsername())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRITION))
                 .signWith(SignatureAlgorithm.HS256, APPSECRET_KEY).compact();
@@ -45,20 +46,21 @@ public class JwtTokenUtils {
 
     /**
      * 生成token
+     *
      * @param username
      * @param role
      * @return
      */
-    public static String createToken(String username,String role) {
+    public static String createToken(String username, String role) {
 
-        Map<String,Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         map.put(ROLE_CLAIMS, role);
 
         String token = Jwts
                 .builder()
                 .setSubject(username)
                 .setClaims(map)
-                .claim("username",username)
+                .claim("username", username)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRITION))
                 .signWith(SignatureAlgorithm.HS256, APPSECRET_KEY).compact();
@@ -77,85 +79,40 @@ public class JwtTokenUtils {
 
     /**
      * 获取用户名
+     *
      * @param token
      * @return
      */
-    public static String getUsername(String token){
+    public static String getUsernameFromToken(String token) {
         Claims claims = Jwts.parser().setSigningKey(APPSECRET_KEY).parseClaimsJws(token).getBody();
         return claims.get("username").toString();
     }
 
     /**
      * 获取用户角色
+     *
      * @param token
      * @return
      */
-    public static String getUserRole(String token){
+    public static String getUserRoleFromToken(String token) {
         Claims claims = Jwts.parser().setSigningKey(APPSECRET_KEY).parseClaimsJws(token).getBody();
         return claims.get("rol").toString();
     }
 
     /**
      * 是否过期
+     *
      * @param token
      * @return
      */
-    public static boolean isExpiration(String token){
+    public static boolean isExpiration(String token) {
         Claims claims = Jwts.parser().setSigningKey(APPSECRET_KEY).parseClaimsJws(token).getBody();
         return claims.getExpiration().before(new Date());
     }
 
-    public static void main(String[] args) {
-        String name = "acong";
-        String role = "rol";
-        String token = createToken(name,role);
-        System.out.println(token);
 
-        Claims claims = checkJWT(token);
-        System.out.println(claims.get("username"));
+    public static boolean validateToken(String authToken, UserDetails userDetails) {
 
-        System.out.println(getUsername(token));
-        System.out.println(getUserRole(token));
-        System.out.println(isExpiration(token));
-
+        return true;
     }
-
-
-    /**
-     * eyJhbGciOiJIUzI1NiJ9.
-     * eyJzdWIiOiJjb25nZ2UiLCJpZCI6IjExMDExIiwibmFtZSI6Im51b3dlaXNpa2kiLCJpbWciOiJ3d3cudW9rby5jb20vMS5wbmciLCJpYXQiOjE1NTQ5OTI1NzksImV4cCI6MTU1NTU5NzM3OX0.
-     * 6DJ9En-UBcTiMRldZeevJq3e1NxJgOWryUyim4_-tEE
-     *
-     * @param args
-     */
-
-	/*public static void main(String[] args) {
-
-		Users user = new Users();
-		user.setId("11011");
-		user.setUserName("nuoweisiki");
-		user.setFaceImage("www.uoko.com/1.png");
-		String token = generateJsonWebToken(user);
-
-		System.out.println(token);
-
-		Claims claims = checkJWT(token);
-		if (claims != null) {
-			String id = claims.get("id").toString();
-			String name = claims.get("name").toString();
-			String img = claims.get("img").toString();
-
-			String rol = claims.get("rol").toString();
-
-			System.out.println("id:" + id);
-			System.out.println("name:" + name);
-			System.out.println("img:" + img);
-
-			System.out.println("rol:" + rol);
-
-
-
-		}
-
-	}*/
 }
