@@ -1,5 +1,6 @@
-package com.jinlong.uploadmodel.entity.dto;
+package com.jinlong.uploadmodel.entity.data;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -18,7 +19,7 @@ public class RoleTable implements Serializable {
     /**
      * 角色id
      */
-    @TableId
+    @TableId(type = IdType.AUTO)
     private Integer roleId;
 
     /**

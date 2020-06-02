@@ -9,10 +9,19 @@ spring:
     host: 47.103.147.93
     password: root
     port: 6379
+    timeout: 6000
 debug: true
 logging:
   level:
-    org.springframework.security: debug
-app:
-  jwtSecret: JWTSuperSecretKey
-  jwtExpirationInMs: 604800000
+    org.springframework.security.*: debug
+    com.baomidou.example.mapper: debug
+jwt:
+#  jwt私钥密匙
+  secret: "JWTSuperSecretKey"
+#  过期时间 7天
+  expirationInMs: 604800000
+  authorization: "Authorization"
+  bearer: "Bearer"
+redis:
+  accessKey: "access"
+  hashKeyPrefix: "jwtUser_"

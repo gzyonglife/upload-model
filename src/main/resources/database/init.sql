@@ -9,4 +9,4 @@ insert into user_table
 VALUES ('admin', 'admin', '$2a$10$Q96zmpvV4Udk81xT9ZfdbeF0zRezkHWiHt/jBIbG5391PObg2j35i', 0, 'admin',
         current_timestamp(), 1),
        ('guest', 'guest', '$2a$10$PdeHEh2nNvOI/TUiWoNBo.tdM.JUG3hL.jco2DEczFzJ1HLFqB5n2', 0, 'guest',
-        current_timestamp(), 4);
+        current_timestamp(), 4);  

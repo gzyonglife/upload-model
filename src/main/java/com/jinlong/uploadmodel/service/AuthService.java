@@ -1,6 +1,6 @@
 package com.jinlong.uploadmodel.service;
 
-import com.jinlong.uploadmodel.entity.dto.UserTable;
+import com.jinlong.uploadmodel.entity.data.UserTable;
 
 public interface AuthService {
     UserTable register(UserTable userToAdd);

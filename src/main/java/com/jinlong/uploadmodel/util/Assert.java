@@ -1,6 +1,6 @@
 package com.jinlong.uploadmodel.util;
 
-import com.jinlong.uploadmodel.config.exception.CustomExceptionEnum;
+import org.springframework.util.StringUtils;
 
 /**
  * @description: Assert
@@ -10,17 +10,9 @@ import com.jinlong.uploadmodel.config.exception.CustomExceptionEnum;
  */
 public class Assert {
 
-    /**
-     * <p>断言对象<code>obj</code>非空。如果对象<code>obj</code>为空，则抛出异常
-     *
-     * @param obj     待判断对象
-     * @param message 异常信息
-     * @throws RuntimeException
-     */
-    public static void assertNotNull(Object obj, String message) {
-        if (obj == null) {
-            throw new RuntimeException(message);
-        }
+    public static void assertNotEmpty(String obj, CustomExceptionEnum exceptionEnum) {
+        if (!StringUtils.hasText(obj))
+            throw exceptionEnum.getException();
     }
 
     /**
