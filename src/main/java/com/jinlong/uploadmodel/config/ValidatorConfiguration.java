@@ -7,7 +7,12 @@ import org.springframework.context.annotation.Configuration;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-
+/**
+ * @description: ValidatorConfiguration
+ * @program: upload-model
+ * @author: jinlong
+ * @time: 2020/6/1 15:54
+ */
 @Configuration
 public class ValidatorConfiguration {
     @Bean
@@ -16,8 +21,6 @@ public class ValidatorConfiguration {
                 .configure()
                 .addProperty( "hibernate.validator.fail_fast", "true" )
                 .buildValidatorFactory();
-        Validator validator = validatorFactory.getValidator();
-
-        return validator;
+        return validatorFactory.getValidator();
     }
 }

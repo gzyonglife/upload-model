@@ -57,6 +57,18 @@ public class UserDetails implements org.springframework.security.core.userdetail
         this.authorities = Collections.singleton(simpleGrantedAuthority);
     }
 
+    public boolean hasRole(String role) {
+        if (role == null || "".equals(role)) {
+            return false;
+        }
+        for (GrantedAuthority grantedAuthority : this.getAuthorities()) {
+            if (role.equals(grantedAuthority.getAuthority())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public String getPassword() {
         return password;

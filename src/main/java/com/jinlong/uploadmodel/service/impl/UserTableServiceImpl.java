@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jinlong.uploadmodel.dao.UserTableDao;
 import com.jinlong.uploadmodel.entity.bo.UserBo;
 import com.jinlong.uploadmodel.entity.data.UserTable;
+import com.jinlong.uploadmodel.entity.vo.PageVo;
 import com.jinlong.uploadmodel.entity.vo.UserVo;
 import com.jinlong.uploadmodel.service.UserTableService;
 import com.jinlong.uploadmodel.util.Assert;
@@ -16,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * @description: UserTableServiceImpl
@@ -70,9 +70,16 @@ public class UserTableServiceImpl implements UserTableService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public List<UserVo> getUserList(Integer id) {
-        List<UserTable> userTables = userDao.selectList(new QueryWrapper<UserTable>().eq("creator_id", id));
-        return BeanBeanHelpUtils.copyList(userTables, UserVo.class);
+    public PageVo<UserVo> getUserListOfPage(Integer id, PageVo pageVo) {
+
+
+        Page<UserTable> tablePage = userDao.selectPage(new Page<>(pageVo.getCurrent(), pageVo.getSize()), new QueryWrapper<UserTable>().eq("creator_id", id));
+        PageVo<UserVo> resultPage = new PageVo<>();
+        resultPage.setCurrent(tablePage.getCurrent());
+        resultPage.setSize(tablePage.getSize());
+        resultPage.setTotal(tablePage.getTotal());
+        resultPage.setData(BeanBeanHelpUtils.copyList(tablePage.getRecords(), UserVo.class));
+        return resultPage;
     }
 
     @Override

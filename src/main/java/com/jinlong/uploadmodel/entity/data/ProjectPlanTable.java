@@ -1,0 +1,98 @@
+package com.jinlong.uploadmodel.entity.data;
+
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
+
+import java.io.Serializable;
+import java.util.Date;
+
+/**
+ * project_details_table
+ *
+ * @author
+ */
+@Data
+@TableName("project_plan_table")
+public class ProjectPlanTable implements Serializable {
+    private static final long serialVersionUID = 5529134822800240881L;
+    /**
+     * 项目详情id
+     */
+    @TableId(type = IdType.AUTO)
+    private Integer projectDetailsId;
+
+    /**
+     * 项目名称
+     */
+    private String projectName;
+
+    /**
+     * 项目在用户存储空间的地址
+     */
+    private String projectZone;
+
+    /**
+     * 创建时间戳
+     */
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    private Date createTime;
+
+    /**
+     * 项目备注
+     */
+    private String projectNote;
+
+    /**
+     * 项目所在分类id
+     */
+    private Integer projectCategoryId;
+
+    /**
+     * 项目年度编号
+     */
+    private String itemNumber;
+
+    /**
+     * 建设单位id
+     */
+    private Integer constructionFirmId;
+
+    /**
+     * 代建单位id
+     */
+    private Integer agentConstructionFirmId;
+
+    /**
+     * 配合单位id
+     */
+    private Integer cooperateFirmId;
+
+    /**
+     * 父级项目id
+     */
+    private Integer projectParent;
+
+    /**
+     * 项目计划id
+     */
+    private Integer projectPlanId;
+
+    /**
+     * 项目计划实施状况id
+     */
+    private Integer projectPlanPracticalId;
+
+    /**
+     * 项目所属用户id
+     */
+    private Integer userId;
+
+    /**
+     * 续建项目id
+     */
+    private Integer continueProjectId;
+
+}

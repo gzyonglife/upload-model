@@ -2,6 +2,7 @@ package com.jinlong.uploadmodel.controller;
 
 import com.jinlong.uploadmodel.entity.access.UserDetails;
 import com.jinlong.uploadmodel.entity.bo.UserBo;
+import com.jinlong.uploadmodel.entity.vo.PageVo;
 import com.jinlong.uploadmodel.entity.vo.RegisterVo;
 import com.jinlong.uploadmodel.entity.vo.UserVo;
 import com.jinlong.uploadmodel.service.UserTableService;
@@ -14,7 +15,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotEmpty;
-import java.util.List;
 
 /**
  * @description: UserController
@@ -71,7 +71,7 @@ public class UserController {
      * @param user
      * @return
      */
-    @PreAuthorize("hasAuthority('SUPERADMIN','ADMIN','guest')")
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN','ADMIN','guest')")
     @PutMapping("modifyUser/userId")
     public ResponseEntity<UserVo> modifyUserById(@RequestParam @Validated UserVo userVo, @AuthenticationPrincipal UserDetails user) {
         // 判断是否修改成功
@@ -85,15 +85,15 @@ public class UserController {
 
     /**
      * 获取用户列表
+     *
      * @param user
      * @return
      */
     @PreAuthorize("hasAuthority('SUPERADMIN')")
     @GetMapping("getUser/all")
-    public ResponseEntity<List<UserVo>> getUserList(@AuthenticationPrincipal UserDetails user) {
-
-        List<UserVo> result = userService.getUserList(user.getId());
-        if (!result.isEmpty()) {
+    public ResponseEntity<PageVo<UserVo>> getUserList(@RequestBody @Validated PageVo pageVo, @AuthenticationPrincipal UserDetails user) {
+        PageVo<UserVo> result = userService.getUserListOfPage(user.getId(), pageVo);
+        if (!result.getData().isEmpty()) {
             return ResponseEntity.ok(result);
         } else {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

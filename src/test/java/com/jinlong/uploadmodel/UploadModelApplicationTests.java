@@ -41,8 +41,7 @@ class UploadModelApplicationTests {
 
     @Test
     void mybatisPageTest() {
-
-        Page<UserTable> page = new Page<>(2, 5);
+        Page<UserTable> page = new Page<>(3, 5);
         Page<UserTable> userIPage = userDao.selectPage(page, new QueryWrapper<>());
         assertThat(page).isSameAs(userIPage);
         log.error("总条数 -------------> {}", userIPage.getTotal());

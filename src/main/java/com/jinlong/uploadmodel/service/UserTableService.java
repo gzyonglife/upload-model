@@ -1,9 +1,8 @@
 package com.jinlong.uploadmodel.service;
 
 import com.jinlong.uploadmodel.entity.bo.UserBo;
+import com.jinlong.uploadmodel.entity.vo.PageVo;
 import com.jinlong.uploadmodel.entity.vo.UserVo;
-
-import java.util.List;
 
 /**
  * @description: UserTableService
@@ -41,7 +40,8 @@ public interface UserTableService {
      * 获取用户列表
      *
      * @param id
+     * @param pageVo
      * @return
      */
-    List<UserVo> getUserList(Integer id);
+    PageVo<UserVo> getUserListOfPage(Integer id, PageVo pageVo);
 }
