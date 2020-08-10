@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -38,6 +39,11 @@ public class ProjectVo {
      * 父级项目id
      */
     private Integer projectParent;
+    /**
+     * 项目类型id
+     */
+    @NotNull(message = "projectCategoryId是必须的")
+    private Integer projectCategoryId;
 
     /**
      * 创建时间戳

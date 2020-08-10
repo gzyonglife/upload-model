@@ -1,8 +1,8 @@
 package com.jinlong.uploadmodel.entity.vo;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -14,77 +14,105 @@ import java.util.Date;
 @Data
 public class ProjectPlanVo {
     /**
-     * 项目详情id
-     */
-    private Integer projectDetailsId;
-    /**
-     * 项目名称
-     */
-    private String projectName;
-
-    /**
-     * 项目在用户存储空间的地址
-     */
-    private String projectZone;
-
-    /**
-     * 创建时间戳
-     */
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-    private Date createTime;
-
-    /**
-     * 项目备注
-     */
-    private String projectNote;
-
-    /**
-     * 项目所在分类id
-     */
-    private Integer projectCategoryId;
-
-    /**
-     * 项目年度编号
-     */
-    private String itemNumber;
-
-    /**
-     * 建设单位id
-     */
-    private Integer constructionFirmId;
-
-    /**
-     * 代建单位id
-     */
-    private Integer agentConstructionFirmId;
-
-    /**
-     * 配合单位id
-     */
-    private Integer cooperateFirmId;
-
-    /**
-     * 父级项目id
-     */
-    private Integer projectParent;
-
-    /**
      * 项目计划id
      */
     private Integer projectPlanId;
+    /**
+     * 项目id
+     */
+    @NotNull(message = "projectId是必须的")
+    private Integer projectId;
+    /**
+     * 计划年份
+     */
+
+    @NotNull(message = "projectPlanYear是必须的")
+    private Date projectPlanYear;
 
     /**
-     * 项目计划实施状况id
+     * 开工日期
      */
-    private Integer projectPlanPracticalId;
+    private Date projectPlanExpectStartTime;
 
     /**
-     * 项目所属用户id
+     * 竣工日期
      */
-    private Integer userId;
+    private Date projectPlanExpectEndTime;
 
     /**
-     * 续建项目id
+     * 总投资额
      */
-    private Integer continueProjectId;
+    private Double projectPlanInvestTotal;
+
+    /**
+     * 完成额
+     */
+    private Double projectPlanInvestFinish;
+
+    /**
+     * 一月目标
+     */
+    private String projectPlanJanuary;
+
+    /**
+     * 二月目标
+     */
+    private String projectPlanFebruary;
+
+    /**
+     * 三月目标
+     */
+    private String projectPlanMarch;
+
+    /**
+     * 四月目标
+     */
+    private String projectPlanApril;
+
+    /**
+     * 五月目标
+     */
+    private String projectPlanMay;
+
+    /**
+     * 六月目标
+     */
+    private String projectPlanJune;
+
+    /**
+     * 七月目标
+     */
+    private String projectPlanJuly;
+
+    /**
+     * 八月目标
+     */
+    private String projectPlanAugust;
+
+    /**
+     * 九月目标
+     */
+    private String projectPlanSeptember;
+
+    /**
+     * 十月目标
+     */
+    private String projectPlanOctober;
+
+    /**
+     * 十一月目标
+     */
+    private String projectPlanNovember;
+
+    /**
+     * 十二月阶目标
+     */
+    private String projectPlanDecember;
+
+    /**
+     * 是否为计划，或者为实施
+     */
+    @NotNull(message = "planType是必须的")
+    private Boolean planType;
+
 }

@@ -52,12 +52,12 @@ public class BeanBeanHelpUtils {
         ArrayList<T> result = new ArrayList<>(o.size());
         try {
             for (O oClass : o) {
-                result.add(copyProperties(o, t));
+                result.add(copyProperties(oClass, t));
             }
             return result;
         } catch (Exception e) {
             log.error("数据转化异常，异常信息为：{}", e.getMessage());
-            return null;
+            return Collections.emptyList();
         }
     }
 

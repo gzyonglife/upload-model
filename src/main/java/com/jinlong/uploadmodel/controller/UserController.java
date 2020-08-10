@@ -1,20 +1,22 @@
 package com.jinlong.uploadmodel.controller;
 
 import com.jinlong.uploadmodel.entity.access.UserDetails;
-import com.jinlong.uploadmodel.entity.bo.UserBo;
 import com.jinlong.uploadmodel.entity.vo.PageVo;
 import com.jinlong.uploadmodel.entity.vo.RegisterVo;
+import com.jinlong.uploadmodel.entity.vo.ResponseEntity;
 import com.jinlong.uploadmodel.entity.vo.UserVo;
-import com.jinlong.uploadmodel.service.UserTableService;
+import com.jinlong.uploadmodel.service.UserService;
+import com.jinlong.uploadmodel.util.CustomResponseEnum;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
+;import java.util.Optional;
 
 /**
  * @description: UserController
@@ -27,7 +29,7 @@ import javax.validation.constraints.NotEmpty;
 public class UserController {
 
     @Autowired
-    UserTableService userService;
+    UserService userService;
 
 
     /**
@@ -39,16 +41,19 @@ public class UserController {
      */
     @PreAuthorize("hasAuthority('SUPERADMIN')")
     @PostMapping("register")
-    public ResponseEntity<?> register(@RequestBody @Validated RegisterVo registerVo, @AuthenticationPrincipal UserDetails user) {
-        UserBo userBo = UserBo
-                .builder()
-                .userName(registerVo.getUserName())
-                .loginName(registerVo.getLoginName())
-                .loginPassword(registerVo.getLoginPassword())
-                .roleId(registerVo.getRoleId())
-                .creatorId(user.getId())
-                .build();
-        return ResponseEntity.ok(userService.create(userBo));
+    public ResponseEntity<?> register(
+            @RequestBody @Validated RegisterVo registerVo,
+            @AuthenticationPrincipal UserDetails user) {
+        Integer newUserId = userService.create(registerVo, user.getId());
+        if (newUserId != null && newUserId >= 0) {
+            return ResponseEntity
+                    .builder()
+                    .code(CustomResponseEnum.CREATE_USER_OK.getCode())
+                    .message(CustomResponseEnum.CREATE_USER_OK.getMessage())
+                    .data(newUserId)
+                    .build();
+        }
+        return ResponseEntity.createFromEnum(CustomResponseEnum.CREATE_USER_FAILURE);
     }
 
     /**
@@ -68,19 +73,35 @@ public class UserController {
      * 修改用户
      *
      * @param userVo
-     * @param user
+     * @param userDetails
      * @return
      */
     @PreAuthorize("hasAnyAuthority('SUPERADMIN','ADMIN','guest')")
     @PutMapping("modifyUser/userId")
-    public ResponseEntity<UserVo> modifyUserById(@RequestParam @Validated UserVo userVo, @AuthenticationPrincipal UserDetails user) {
-        // 判断是否修改成功
-        UserVo result = userService.modifyUser(userVo, user.getId());
-        if (result == null) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        } else {
-            return ResponseEntity.ok(result);
+    public ResponseEntity<?> modifyUserById(
+            @RequestParam @Validated UserVo userVo,
+            @AuthenticationPrincipal UserDetails userDetails) {
+        // 判断当前用户是否有修改权限
+        if (!userService.hasUser(userDetails, userVo.getUserId())) {
+            return ResponseEntity.createFromEnum(CustomResponseEnum.AUTHORITY_INSUFFICIENT);
         }
+        // 进行修改
+        UserVo result = userService.modifyUser(userVo, userDetails.getId());
+
+        // 判断是否修改成功
+        if (result == null) {
+            return ResponseEntity
+                    .builder()
+                    .code(CustomResponseEnum.CREATE_USER_FAILURE.getCode())
+                    .message(CustomResponseEnum.CREATE_USER_FAILURE.getMessage())
+                    .build();
+        }
+        return ResponseEntity
+                .builder()
+                .code(CustomResponseEnum.CREATE_USER_OK.getCode())
+                .message(CustomResponseEnum.CREATE_USER_OK.getMessage())
+                .data(result)
+                .build();
     }
 
     /**
@@ -91,13 +112,40 @@ public class UserController {
      */
     @PreAuthorize("hasAuthority('SUPERADMIN')")
     @GetMapping("getUser/all")
-    public ResponseEntity<PageVo<UserVo>> getUserList(@RequestBody @Validated PageVo pageVo, @AuthenticationPrincipal UserDetails user) {
+    public ResponseEntity<?> getUserList(
+            @RequestBody @Validated PageVo pageVo,
+            @AuthenticationPrincipal UserDetails user) {
         PageVo<UserVo> result = userService.getUserListOfPage(user.getId(), pageVo);
-        if (!result.getData().isEmpty()) {
-            return ResponseEntity.ok(result);
-        } else {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        if (result.getData().isEmpty()) {
+            return ResponseEntity.createFromEnum(CustomResponseEnum.GET_USER_LIST_FAILURE);
         }
+        return ResponseEntity
+                .builder()
+                .code(CustomResponseEnum.GET_USER_LIST_OK.getCode())
+                .message(CustomResponseEnum.GET_USER_LIST_OK.getMessage())
+                .data(result)
+                .build();
+    }
 
+    /**
+     * 获取用户列表
+     *
+     * @param id
+     * @return
+     */
+    @PreAuthorize("hasAuthority('SUPERADMIN')")
+    @GetMapping("getUser/id")
+    public ResponseEntity<?> getUserById(
+            @RequestParam @Validated @NotNull(message = "id不可为空") Integer id) {
+        Optional<UserVo> result = userService.getUserById(id);
+        if (!result.isPresent()) {
+            return ResponseEntity.createFromEnum(CustomResponseEnum.GET_USER_FAILURE);
+        }
+        return ResponseEntity
+                .builder()
+                .code(CustomResponseEnum.GET_USER_OK.getCode())
+                .message(CustomResponseEnum.GET_USER_OK.getMessage())
+                .data(result.get())
+                .build();
     }
 }

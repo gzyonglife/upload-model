@@ -2,6 +2,7 @@ package com.jinlong.uploadmodel.config.jwt;
 
 import com.jinlong.uploadmodel.config.security.UserDetailsServiceImpl;
 import com.jinlong.uploadmodel.util.JwtTokenProvider;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,6 +25,7 @@ import java.io.IOException;
  * @author: jinlong
  * @time: 2020/6/1 12:11
  */
+@Slf4j
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -45,7 +47,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
+//        if (request.getServletPath().startsWith("/uploadFolder")) {
+//            filterChain.doFilter(request, response);
+//            return;
+//        }
         String jwt = getJwtFromRequest(request);
+        log.info("取出头部token：{}", jwt);
         if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
 
             int userId = tokenProvider.getUserIdFromJwt(jwt);

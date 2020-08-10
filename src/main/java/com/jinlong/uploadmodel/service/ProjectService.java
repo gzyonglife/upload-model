@@ -1,8 +1,10 @@
 package com.jinlong.uploadmodel.service;
 
-import com.jinlong.uploadmodel.entity.access.UserDetails;
 import com.jinlong.uploadmodel.entity.vo.PageVo;
 import com.jinlong.uploadmodel.entity.vo.ProjectVo;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * @description: ProjectService
@@ -15,17 +17,76 @@ public interface ProjectService {
      * 获取项目列表
      *
      * @param pageVo
-     * @param user
      * @return
      */
-    PageVo<ProjectVo> getProjectListOfPage(PageVo pageVo, UserDetails user);
+    PageVo<ProjectVo> getProjectListOfPage(PageVo pageVo);
+
+    /**
+     * 获取项目列表
+     *
+     * @param pageVo
+     * @param userId
+     * @return
+     */
+    PageVo<ProjectVo> getProjectListOfPage(PageVo pageVo, Integer userId);
+
+    /**
+     * 根据项目分类id查询项目
+     *
+     * @param categoryId
+     * @param userId
+     * @return
+     */
+    List<ProjectVo> getProjectByCategoryId(Integer categoryId, Integer userId);
+
+    /**
+     * 根据项目分类id查询项目
+     *
+     * @param categoryId
+     * @return
+     */
+    List<ProjectVo> getProjectByCategoryId(Integer categoryId);
 
     /**
      * 添加新项目
      *
      * @param projectVo
-     * @param user
+     * @param userId
      * @return
      */
-    boolean addProject(ProjectVo projectVo, UserDetails user);
+    ProjectVo addProject(ProjectVo projectVo, Integer userId);
+
+    /**
+     * 添加新项目
+     *
+     * @param projectVo
+     * @return
+     */
+    ProjectVo addProject(ProjectVo projectVo);
+
+    /**
+     * 判断该项目下是否含有该类型的计划实施信息
+     *
+     * @param projectId
+     * @param planType
+     * @return
+     */
+    boolean hasProjectPlan(Integer projectId, Boolean planType);
+
+    /**
+     * 根据项目id查询项目信息
+     *
+     * @param id
+     * @return
+     */
+    Optional<ProjectVo> getProjectById(Integer id);
+
+    /**
+     * 根据项目id以及用户id查询项目信息
+     *
+     * @param id
+     * @param userDetailsId
+     * @return
+     */
+    Optional<ProjectVo> getProjectById(Integer id, Integer userDetailsId);
 }

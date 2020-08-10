@@ -10,89 +10,115 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * project_details_table
+ * project_plan_table
  *
  * @author
  */
 @Data
 @TableName("project_plan_table")
 public class ProjectPlanTable implements Serializable {
-    private static final long serialVersionUID = 5529134822800240881L;
-    /**
-     * 项目详情id
-     */
-    @TableId(type = IdType.AUTO)
-    private Integer projectDetailsId;
-
-    /**
-     * 项目名称
-     */
-    private String projectName;
-
-    /**
-     * 项目在用户存储空间的地址
-     */
-    private String projectZone;
-
-    /**
-     * 创建时间戳
-     */
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-    private Date createTime;
-
-    /**
-     * 项目备注
-     */
-    private String projectNote;
-
-    /**
-     * 项目所在分类id
-     */
-    private Integer projectCategoryId;
-
-    /**
-     * 项目年度编号
-     */
-    private String itemNumber;
-
-    /**
-     * 建设单位id
-     */
-    private Integer constructionFirmId;
-
-    /**
-     * 代建单位id
-     */
-    private Integer agentConstructionFirmId;
-
-    /**
-     * 配合单位id
-     */
-    private Integer cooperateFirmId;
-
-    /**
-     * 父级项目id
-     */
-    private Integer projectParent;
-
+    private static final long serialVersionUID = 8367204760974779138L;
     /**
      * 项目计划id
      */
+    @TableId(type = IdType.AUTO)
     private Integer projectPlanId;
 
     /**
-     * 项目计划实施状况id
+     * 项目id
      */
-    private Integer projectPlanPracticalId;
+    private Integer projectId;
+    /**
+     * 计划年份
+     */
+    @JsonFormat(pattern = "yyyy", timezone = "GMT+8")
+    private Date projectPlanYear;
 
     /**
-     * 项目所属用户id
+     * 开工日期
      */
-    private Integer userId;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date projectPlanExpectStartTime;
 
     /**
-     * 续建项目id
+     * 竣工日期
      */
-    private Integer continueProjectId;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date projectPlanExpectEndTime;
+
+    /**
+     * 总投资额
+     */
+    private Double projectPlanInvestTotal;
+
+    /**
+     * 完成额
+     */
+    private Double projectPlanInvestFinish;
+
+    /**
+     * 一月目标
+     */
+    private String projectPlanJanuary;
+
+    /**
+     * 二月目标
+     */
+    private String projectPlanFebruary;
+
+    /**
+     * 三月目标
+     */
+    private String projectPlanMarch;
+
+    /**
+     * 四月目标
+     */
+    private String projectPlanApril;
+
+    /**
+     * 五月目标
+     */
+    private String projectPlanMay;
+
+    /**
+     * 六月目标
+     */
+    private String projectPlanJune;
+
+    /**
+     * 七月目标
+     */
+    private String projectPlanJuly;
+
+    /**
+     * 八月目标
+     */
+    private String projectPlanAugust;
+
+    /**
+     * 九月目标
+     */
+    private String projectPlanSeptember;
+
+    /**
+     * 十月目标
+     */
+    private String projectPlanOctober;
+
+    /**
+     * 十一月目标
+     */
+    private String projectPlanNovember;
+
+    /**
+     * 十二月阶目标
+     */
+    private String projectPlanDecember;
+
+    /**
+     * 是否为计划，或者为实施
+     */
+    private Boolean planType;
 
 }

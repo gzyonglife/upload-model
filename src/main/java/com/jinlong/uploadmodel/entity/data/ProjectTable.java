@@ -43,11 +43,18 @@ public class ProjectTable implements Serializable {
      * 父级项目id
      */
     private Integer projectParent;
-
+    /**
+     * 项目文件空间地址id
+     */
+    private Integer projectZoneId;
+    /**
+     * 项目类型id
+     */
+    private Integer projectCategoryId;
     /**
      * 创建时间戳
      */
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
 
     /**

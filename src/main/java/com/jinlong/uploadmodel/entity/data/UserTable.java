@@ -53,11 +53,6 @@ public class UserTable implements Serializable {
     private Date createTime;
 
     /**
-     * 用户存储空间地址
-     */
-    private String userZone;
-
-    /**
      * 用户权限id
      */
     private Integer roleId;

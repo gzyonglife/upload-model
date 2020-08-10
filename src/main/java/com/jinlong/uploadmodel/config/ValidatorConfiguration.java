@@ -15,6 +15,10 @@ import javax.validation.ValidatorFactory;
  */
 @Configuration
 public class ValidatorConfiguration {
+    /**
+     * 校验validator
+     * @return
+     */
     @Bean
     public Validator validator(){
         ValidatorFactory validatorFactory = Validation.byProvider( HibernateValidator.class )

@@ -1,10 +1,10 @@
 package com.jinlong.uploadmodel.controller;
 
+import com.jinlong.uploadmodel.entity.vo.ResponseEntity;
 import com.jinlong.uploadmodel.entity.vo.RoleVo;
 import com.jinlong.uploadmodel.service.RoleService;
+import com.jinlong.uploadmodel.util.CustomResponseEnum;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,12 +27,17 @@ public class RoleController {
 
     @PreAuthorize("hasAuthority('SUPERADMIN')")
     @GetMapping("getRole/all")
-    public ResponseEntity<List<RoleVo>> getRoleList() {
+    public ResponseEntity<?> getRoleList() {
         List<RoleVo> roleVoList = roleService.getRoleList();
         if (roleVoList.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+            return ResponseEntity.createFromEnum(CustomResponseEnum.GET_ROLE_FAILURE);
         } else {
-            return ResponseEntity.ok(roleVoList);
+            return ResponseEntity
+                    .builder()
+                    .code(CustomResponseEnum.GET_ROLE_FAILURE.getCode())
+                    .message(CustomResponseEnum.GET_ROLE_FAILURE.getMessage())
+                    .data(roleVoList)
+                    .build();
         }
     }
 
