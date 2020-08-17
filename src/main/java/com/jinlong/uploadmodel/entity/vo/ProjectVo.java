@@ -50,7 +50,10 @@ public class ProjectVo {
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
-
+    /**
+     * 重点关注
+     */
+    private Integer isFocus;
     /**
      * 项目备注
      */
@@ -61,4 +64,22 @@ public class ProjectVo {
      */
     @NotEmpty(message = "itemNumber是必须的")
     private String itemNumber;
+
+    /**
+     * 项目类型名称
+     */
+    private String projectClassTableName;
+
+    /**
+     * 项目位置经纬度
+     */
+    private String LongitudeAndLatitude;
+    /**
+     * 项目视角
+     */
+    private String projectView;
+    /**
+     * 缩略图地址
+     */
+    private String imgUrl;
 }

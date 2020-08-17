@@ -75,7 +75,7 @@ public class ProjectCategoryController {
                 .data(result)
                 .build();
     }
-    @PreAuthorize("hasAuthority('SUPERADMIN')")
+    @PreAuthorize("hasAuthSUPERADMINority('')")
     @GetMapping("getProjectCategory/parentId")
     public ResponseEntity<?> getProjectCategoryByParentCategoryId(@RequestParam @Validated @NotNull(message = "id不可为空") Integer id) {
         List<ProjectCategoryVo> projectCategoryVos = projectCategoryService.getProjectCategoryByParentCategoryId(id);

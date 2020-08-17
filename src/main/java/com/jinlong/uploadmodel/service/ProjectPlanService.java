@@ -1,6 +1,9 @@
 package com.jinlong.uploadmodel.service;
 
+import com.jinlong.uploadmodel.entity.data.ProjectPlanTable;
 import com.jinlong.uploadmodel.entity.vo.ProjectPlanVo;
+
+import java.util.List;
 
 /**
  * @description: ProjectPlanService
@@ -16,6 +19,14 @@ public interface ProjectPlanService {
      * @return
      */
     ProjectPlanVo getPlanForProjectId(Integer projectPlanId);
+
+    /**
+     * 根据项目id获取计划
+     *
+     * @param projectId
+     * @return
+     */
+    List<ProjectPlanTable> getPlanForProjectIds(Integer projectId);
 
     /**
      * 添加项目计划实施信息

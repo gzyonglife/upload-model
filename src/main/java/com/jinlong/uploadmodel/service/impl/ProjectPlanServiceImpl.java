@@ -17,6 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * @description: ProjectPlanServiceImpl
  * @program: upload-model
@@ -47,7 +51,19 @@ public class ProjectPlanServiceImpl implements ProjectPlanService {
         ProjectPlanTable planTable = projectPlanDao.selectById(projectPlanId);
         return BeanBeanHelpUtils.copyProperties(planTable, ProjectPlanVo.class);
     }
-
+    /**
+     * 获取项目计划实施信息
+     *
+     * @param projectId
+     * @return
+     */
+    @Override
+    public List<ProjectPlanTable> getPlanForProjectIds(Integer projectId) {
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("project_id",projectId);
+        List<ProjectPlanTable> list = projectPlanDao.selectByMap(map);
+        return list;
+    }
     /**
      * 添加项目计划实施信息
      *

@@ -40,6 +40,7 @@ public enum CustomResponseEnum {
     GET_PROJECT_MODEL_TYPE_FAILURE(204, "未获取到项目类型列表"),
 
     GET_PROJECT_CATEGORY_LIST_FAILURE(500, "获取项目分类列表失败"),
+    GET_PROJECT_PAGE_SEARCH_OK(200, "搜索并分页获取项目列表成功"),
     GET_PROJECT_CATEGORY_LIST_OK(200, "获取项目分类列表成功"),
     GET_PROJECT_CATEGORY_FAILURE(500, "获取项目分类列表失败"),
     GET_PROJECT_CATEGORY_OK(200, "获取项目分类列表成功"),
@@ -50,7 +51,16 @@ public enum CustomResponseEnum {
     UPLOAD_PROJECT_MODEL_FAILURE(500, "上传项目模型失败"),
     GET_PROJECT_MODEL_OK(200, "获取项目模型成功"),
     GET_PROJECT_MODEL_NOT_EXIST(404, "获取项目模型为空"),
-    GET_PROJECT_MODEL_FAILURE(500, "获取项目模型失败");
+    GET_PROJECT_MODEL_FAILURE(500, "获取项目模型失败"),
+
+    GET_STATISTICS_PROJECT_TYPE_OK(200,"获取项目类型统计"),
+    GET_STATISTICS_PROJECT_TYPE_FAILURE(500,"获取项目类型统计失败"),
+
+    GET_PROJECT_BY_ID_OK(200,"获取项目详情信息成功"),
+    GET_PROJECT_BY_ID_FAILURE(200,"获取项目详情信息失败");
+
+
+
 
 
     private Integer code;

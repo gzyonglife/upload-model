@@ -1,10 +1,15 @@
 package com.jinlong.uploadmodel.controller;
 
 import com.jinlong.uploadmodel.entity.access.UserDetails;
+import com.jinlong.uploadmodel.entity.data.ProjectDetailsTable;
+import com.jinlong.uploadmodel.entity.data.ProjectPlanTable;
 import com.jinlong.uploadmodel.entity.vo.PageVo;
 import com.jinlong.uploadmodel.entity.vo.ProjectVo;
+import com.jinlong.uploadmodel.entity.vo.ProjectsVo;
 import com.jinlong.uploadmodel.entity.vo.ResponseEntity;
-import com.jinlong.uploadmodel.service.ProjectService;
+import com.jinlong.uploadmodel.service.*;
+import com.jinlong.uploadmodel.util.Assert;
+import com.jinlong.uploadmodel.util.CustomExceptionEnum;
 import com.jinlong.uploadmodel.util.CustomResponseEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,6 +18,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +34,18 @@ public class ProjectController {
 
     @Autowired
     ProjectService projectService;
+
+    @Autowired
+    ProjectCategoryService projectCategoryService;
+
+    @Autowired
+    ProjectPlanService projectPlanService;
+
+    @Autowired
+    ProjectDetailsTableService projectDetailsTableService;
+
+    @Autowired
+    FirmTableService firmTableService;
 
 
     /**
@@ -121,15 +139,80 @@ public class ProjectController {
             // 查询属于自己的项目
             result = projectService.getProjectById(id, userDetails.getId());
         }
+        ProjectsVo projectsVo = new ProjectsVo();
+        ProjectVo projectVo = result.get();
+        projectsVo.setProjectName(projectVo.getProjectName());
+        projectsVo.setProjectId(projectVo.getProjectId());
+        projectsVo.setCateGoryName(projectCategoryService.getProjectCategoryById(projectVo.getProjectId()).getProjectCategoryName());
+        projectsVo.setFocus(projectVo.getIsFocus()==1?true:false);
+        ProjectDetailsTable projectDetailsTable = projectDetailsTableService.getProjectDetailsTableById(projectVo.getProjectId());
+        List<ProjectPlanTable> projectPlanTableList = projectPlanService.getPlanForProjectIds(projectVo.getProjectId());
+        projectsVo.setBuild(firmTableService.getFirmTableById(projectDetailsTable.getCooperateFirmId()));
+        projectsVo.setAgentConstruction(firmTableService.getFirmTableById(projectDetailsTable.getAgentConstructionFirmId()));
+        projectsVo.setCoordination(firmTableService.getFirmTableById(projectDetailsTable.getCooperateFirmId()));
+        for(ProjectPlanTable planTable:projectPlanTableList){
+            Calendar cal = Calendar.getInstance();
+            int month = cal.get(Calendar.MONTH) + 1;
+            String plan = "";
+            switch (month){
+                case 1:
+                    plan = planTable.getProjectPlanJanuary();
+                    break;
+                case 2:
+                    plan = planTable.getProjectPlanFebruary();
+                    break;
+                case 3:
+                    plan = planTable.getProjectPlanMarch();
+                    break;
+                case 4:
+                    plan = planTable.getProjectPlanApril();
+                    break;
+                case 5:
+                    plan = planTable.getProjectPlanMay();
+                    break;
+                case 6:
+                    plan = planTable.getProjectPlanJune();
+                    break;
+                case 7:
+                    plan = planTable.getProjectPlanJuly();
+                    break;
+                case 8:
+                    plan = planTable.getProjectPlanAugust();
+                    break;
+                case 9:
+                    plan = planTable.getProjectPlanSeptember();
+                    break;
+                case 10:
+                    plan = planTable.getProjectPlanOctober();
+                    break;
+                case 11:
+                    plan = planTable.getProjectPlanNovember();
+                    break;
+                case 12:
+                    plan = planTable.getProjectPlanDecember();
+                    break;
+            }
+            if(planTable.getPlanType()){//计划
+                projectsVo.setProjectTimeOpen(planTable.getProjectPlanExpectStartTime());
+                projectsVo.setProjectTimeDown(planTable.getProjectPlanExpectEndTime());
+                projectsVo.setTarget(plan);
+            }else{//实施
+                projectsVo.setProjectTimeOpens(planTable.getProjectPlanExpectStartTime());
+                projectsVo.setProjectTimeDowns(planTable.getProjectPlanExpectEndTime());
+                projectsVo.setActual(plan);
+            }
+            projectsVo.setKilometers(planTable.getProjectPlanInvestTotal());
+            projectsVo.setKilometersYear(planTable.getProjectPlanInvestFinish());
 
+        }
         if (!result.isPresent()) {
-            return ResponseEntity.createFromEnum(CustomResponseEnum.GET_PROJECT_FAILURE);
+            return ResponseEntity.createFromEnum(CustomResponseEnum.GET_PROJECT_BY_ID_FAILURE);
         }
         return ResponseEntity
                 .builder()
-                .code(CustomResponseEnum.GET_PROJECT_OK.getCode())
-                .message(CustomResponseEnum.GET_PROJECT_OK.getMessage())
-                .data(result.get())
+                .code(CustomResponseEnum.GET_PROJECT_BY_ID_OK.getCode())
+                .message(CustomResponseEnum.GET_PROJECT_BY_ID_OK.getMessage())
+                .data(projectsVo)
                 .build();
     }
 
@@ -152,7 +235,6 @@ public class ProjectController {
             // 查询属于自己的项目
             result = projectService.getProjectByCategoryId(categoryId, userDetails.getId());
         }
-
         if (result.isEmpty()) {
             return ResponseEntity.createFromEnum(CustomResponseEnum.GET_PROJECT_FAILURE);
         }
@@ -161,6 +243,26 @@ public class ProjectController {
                 .code(CustomResponseEnum.GET_PROJECT_OK.getCode())
                 .message(CustomResponseEnum.GET_PROJECT_OK.getMessage())
                 .data(result)
+                .build();
+    }
+
+
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN','ADMIN')")
+    @GetMapping("/search/project")
+    public ResponseEntity<?> searchProjectForPage(@RequestParam(name = "projectCategoryId", required = false) Integer projectCategoryId,
+                                                  @RequestParam(name = "name", required = false) String name,
+                                                  @RequestParam(name = "year", required = false) String year,
+                                                  @RequestParam(name = "current", required = false, defaultValue = "1") Integer current,
+                                                  @RequestParam(name = "size", required = false, defaultValue = "10") Integer size,
+                                                  @AuthenticationPrincipal UserDetails userDetails) {
+        PageVo<ProjectVo> projectVoPageVo = projectService.searchProjectForPage(projectCategoryId,name,year,current,size);
+        Assert.assertNotNull(projectVoPageVo, CustomExceptionEnum.GET_NONE);
+        Assert.assertCollectionNotEmpty(projectVoPageVo.getData(), CustomExceptionEnum.GET_NONE);
+        return ResponseEntity
+                .builder()
+                .data(projectVoPageVo)
+                .code(CustomResponseEnum.GET_PROJECT_PAGE_SEARCH_OK.getCode())
+                .message(CustomResponseEnum.GET_PROJECT_PAGE_SEARCH_OK.getMessage())
                 .build();
     }
 }

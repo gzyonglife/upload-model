@@ -3,10 +3,12 @@ package com.jinlong.uploadmodel.util;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.cglib.beans.BeanMap;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @description: BeanBeanHelpUtils
@@ -23,7 +25,7 @@ public class BeanBeanHelpUtils {
      * 将一个javaBean转化为另一个javaBean
      * 遇到参数名相同，类型不同的参数不会进行赋值
      *
-     * @param o   源对象类型
+     * @param o   源对象类型copyList
      * @param t   目标对象class对象
      * @param <T> 目标对象class对象
      * @param <O> 源对象类型
@@ -61,4 +63,12 @@ public class BeanBeanHelpUtils {
         }
     }
 
+    public static <T> Map<String, String> toMap(T t) {
+        if (t == null) {
+            log.warn("数据转化异常，异常信息为：源对象为null");
+            return Collections.emptyMap();
+        }
+
+        return BeanMap.create(t);
+    }
 }

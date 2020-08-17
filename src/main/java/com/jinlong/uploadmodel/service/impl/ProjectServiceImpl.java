@@ -19,8 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * @description: ProjectServiceImpl
@@ -206,5 +205,48 @@ public class ProjectServiceImpl implements ProjectService {
             return Optional.ofNullable(projectVo);
         }
         return Optional.empty();
+    }
+
+    /**
+     * @param projectCategoryId
+     * @param name
+     * @param year
+     * @param current
+     * @param size
+     * @return
+     */
+    @Override
+    public PageVo<ProjectVo> searchProjectForPage(Integer projectCategoryId, String name, String year, Integer current, Integer size) {
+        Page<ProjectTable> page = new Page<>(current, size);
+        QueryWrapper<ProjectTable> projectTableQueryWrapper = new QueryWrapper<>();
+
+//        PageVo<ProjectVo> pageVo = new PageVo<>();
+
+        ProjectTable projectTable = new ProjectTable();
+
+        if (projectCategoryId != null) {
+            projectTable.setProjectCategoryId(projectCategoryId);
+        }
+
+        if (name != null) {
+            projectTableQueryWrapper.like("project_name", name);
+        }
+
+        if (year != null) {
+            projectTable.setItemNumber(year);
+        }
+        projectTableQueryWrapper.setEntity(projectTable);
+        Page<ProjectTable> tablePage = projectDao.selectPage(page, projectTableQueryWrapper);
+        PageVo<ProjectVo> pageVo = BeanBeanHelpUtils.copyProperties(tablePage, PageVo.class);
+        pageVo.setData(BeanBeanHelpUtils.copyList(tablePage.getRecords(),ProjectVo.class));
+        return pageVo;
+    }
+
+    @Override
+    public List<ProjectTable> getProjectByFoucus() {
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("is_focus",1);
+        List<ProjectTable> list = projectDao.selectByMap(map);
+        return list;
     }
 }

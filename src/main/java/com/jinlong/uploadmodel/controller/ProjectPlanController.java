@@ -56,7 +56,7 @@ public class ProjectPlanController {
         }
 
         // 获取项目计划实施信息
-        ProjectPlanVo result = projectPlanService.getPlanForProjectId(projectPlanId);
+        ProjectPlanVo  result = projectPlanService.getPlanForProjectId(projectPlanId);
         if (result == null) {
             return ResponseEntity.createFromEnum(CustomResponseEnum.GET_PROJECT_PLAN_FAILURE);
         } else {

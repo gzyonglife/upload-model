@@ -21,11 +21,12 @@ public class ProjectDetailsTable implements Serializable {
     /**
      * 项目详情id
      */
-    @TableId(type = IdType.AUTO)
+
     private Integer projectDetailsId;
     /**
      * 项目id
      */
+    @TableId(type = IdType.AUTO)
     private Integer projectId;
     /**
      * 项目名称

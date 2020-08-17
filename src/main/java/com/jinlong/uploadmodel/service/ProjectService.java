@@ -1,5 +1,6 @@
 package com.jinlong.uploadmodel.service;
 
+import com.jinlong.uploadmodel.entity.data.ProjectTable;
 import com.jinlong.uploadmodel.entity.vo.PageVo;
 import com.jinlong.uploadmodel.entity.vo.ProjectVo;
 
@@ -89,4 +90,23 @@ public interface ProjectService {
      * @return
      */
     Optional<ProjectVo> getProjectById(Integer id, Integer userDetailsId);
+
+    /**
+     * 重点项目查询
+     *
+     * @return
+     */
+    List<ProjectTable> getProjectByFoucus();
+
+
+    /**
+     * 搜索并分页获取项目列表
+     * @param projectCategoryId
+     * @param name
+     * @param year
+     * @param current
+     * @param size
+     * @return
+     */
+    PageVo<ProjectVo> searchProjectForPage(Integer projectCategoryId, String name, String year, Integer current, Integer size);
 }

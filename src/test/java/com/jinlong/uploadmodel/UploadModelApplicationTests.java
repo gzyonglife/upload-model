@@ -42,8 +42,8 @@ class UploadModelApplicationTests {
     void m1() {
         String name = UUID.randomUUID().toString();
         String password = UUID.randomUUID().toString();
-        System.out.println(passwordEncoder.encode(name));
-        System.out.println(passwordEncoder.encode(password));
+        System.out.println(passwordEncoder.encode("admin"));
+        //System.out.println(passwordEncoder.encode(password));
     }
 
     @Test

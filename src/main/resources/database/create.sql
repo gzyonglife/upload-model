@@ -78,6 +78,9 @@ create table `project_table`
     `project_note`        varchar(255) comment '项目备注',
     `item_number`         varchar(25) not null comment '项目年度编号',
     `user_id`             int         not null comment '项目所属用户id',
+    `img_url`             varchar(255)  comment '项目缩略图文件存放路径',
+    `Longitude_and_latitude`   varchar(255)  comment '项目经纬度地址',
+    `project_view`        varchar(255) comment '项目视角',
     `is_focus`            boolean     not null default false comment '是否为重点关注项目',
     primary key (project_id),
     index (user_id),
@@ -121,6 +124,7 @@ create table `firm_table`
 (
     `firm_id`   int         not null auto_increment comment '单位id',
     `firm_name` varchar(25) not null comment '单位名称',
+    `firm_phone` varchar(25) comment '联系方式',
     primary key (firm_id)
 ) engine = innodb
   char set utf8mb4 comment '单位表';
@@ -155,18 +159,18 @@ create table `project_plan_table`
     `project_plan_expect_end_time`   date comment '竣工日期',
     `project_plan_invest_total`      double comment '总投资额',
     `project_plan_invest_finish`     double comment '完成额',
-    `project_plan_january`           varchar(255) comment '一月目标',
-    `project_plan_february`          varchar(255) comment '二月目标',
-    `project_plan_march`             varchar(255) comment '三月目标',
-    `project_plan_april`             varchar(255) comment '四月目标',
-    `project_plan_may`               varchar(255) comment '五月目标',
-    `project_plan_june`              varchar(255) comment '六月目标',
-    `project_plan_july`              varchar(255) comment '七月目标',
-    `project_plan_august`            varchar(255) comment '八月目标',
-    `project_plan_september`         varchar(255) comment '九月目标',
-    `project_plan_october`           varchar(255) comment '十月目标',
-    `project_plan_november`          varchar(255) comment '十一月目标',
-    `project_plan_december`          varchar(255) comment '十二月阶目标',
+    `project_plan_january`           text comment '一月目标',
+    `project_plan_february`          text comment '二月目标',
+    `project_plan_march`             text comment '三月目标',
+    `project_plan_april`             text comment '四月目标',
+    `project_plan_may`               text comment '五月目标',
+    `project_plan_june`              text comment '六月目标',
+    `project_plan_july`              text comment '七月目标',
+    `project_plan_august`            text comment '八月目标',
+    `project_plan_september`         text comment '九月目标',
+    `project_plan_october`           text comment '十月目标',
+    `project_plan_november`          text comment '十一月目标',
+    `project_plan_december`          text comment '十二月阶目标',
     `plan_type`                      boolean comment '是否为计划，或者为实施',
     primary key (project_plan_id),
     index (project_id)
@@ -190,7 +194,7 @@ create table `project_details_table`
     `project_plan_id`            int comment '项目计划id',
     `project_plan_practical_id`  int comment '项目计划实施状况id',
     `user_id`                    int         not null comment '项目所属用户id',
-    `continue_project_id`        int comment '                       ',
+    `continue_project_id`        int comment '续建项目id',
     primary key (project_details_id),
     index (user_id),
     index (project_id),
@@ -271,6 +275,7 @@ create table `overview_year_plan`
     `project_class_table_id`      int not null comment '年度项目种类id',
     `overview_year_plan_starts`   int not null comment '年内计划开工数量',
     `overview_year_plan_complete` int not null comment '年内计划竣工数量',
+    `overview_year_plan`   int not null comment '年内计划项目',
     primary key (overview_year_plan_id)
 ) engine = innodb
   char set utf8mb4 comment '年度项目总览表';
