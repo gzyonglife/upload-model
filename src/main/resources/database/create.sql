@@ -68,25 +68,24 @@ create table `project_zone`
 drop table if exists `project_table`;
 create table `project_table`
 (
-    `project_id`          int         not null auto_increment comment '项目id',
-    `project_name`        varchar(25) not null comment '项目名称',
-    `project_zone_id`     int         not null comment '项目文件空间地址id',
-    `project_details_id`  int comment '项目详情id',
-    `project_parent`      int comment '父级项目id',
-    `project_category_id` int         not null comment '项目类型id',
-    `create_time`         timestamp   not null default current_timestamp comment '创建时间戳',
-    `project_note`        varchar(255) comment '项目备注',
-    `item_number`         varchar(25) not null comment '项目年度编号',
-    `user_id`             int         not null comment '项目所属用户id',
-    `img_url`             varchar(255)  comment '项目缩略图文件存放路径',
-    `Longitude_and_latitude`   varchar(255)  comment '项目经纬度地址',
-    `project_view`        varchar(255) comment '项目视角',
-    `is_focus`            boolean     not null default false comment '是否为重点关注项目',
+    `project_id`             int          not null auto_increment comment '项目id',
+    `project_name`           varchar(255) not null comment '项目名称',
+    `project_zone_id`        int          not null comment '项目文件空间地址id',
+    `project_details_id`     int comment '项目详情id',
+    `project_parent`         int comment '父级项目id',
+    `project_category_id`    int          not null comment '项目类型id',
+    `create_time`            timestamp    not null default current_timestamp comment '创建时间戳',
+    `project_note`           varchar(255) comment '项目备注',
+    `item_number`            varchar(25)  not null comment '项目年度编号',
+    `user_id`                int          not null comment '项目所属用户id',
+    `img_url`                varchar(255) comment '项目缩略图文件存放路径',
+    `Longitude_and_latitude` varchar(255) comment '项目经纬度地址',
+    `project_view`           varchar(255) comment '项目视角',
+    `is_focus`               boolean      not null default false comment '是否为重点关注项目',
     primary key (project_id),
     index (user_id),
     index (project_category_id),
-    index (project_zone_id),
-    unique index (create_time)
+    index (project_zone_id)
 ) engine = innodb
   default char set utf8mb4 comment '项目表';
 # 项目模型表
@@ -122,8 +121,8 @@ create table `project_model_type_table`
 drop table if exists `firm_table`;
 create table `firm_table`
 (
-    `firm_id`   int         not null auto_increment comment '单位id',
-    `firm_name` varchar(25) not null comment '单位名称',
+    `firm_id`    int         not null auto_increment comment '单位id',
+    `firm_name`  varchar(25) not null comment '单位名称',
     `firm_phone` varchar(25) comment '联系方式',
     primary key (firm_id)
 ) engine = innodb
@@ -180,25 +179,20 @@ create table `project_plan_table`
 drop table if exists `project_details_table`;
 create table `project_details_table`
 (
-    `project_details_id`         int         not null auto_increment comment '项目详情id',
-    `project_id`                 int         not null comment '项目id',
-    `project_name`               varchar(25) not null comment '项目名称',
-    `create_time`                timestamp   not null comment '创建时间戳',
+    `project_details_id`         int       not null auto_increment comment '项目详情id',
+    `project_id`                 int       not null comment '项目id',
+    `create_time`                timestamp not null default current_timestamp comment '创建时间戳',
     `project_note`               varchar(255) comment '项目备注',
-    `project_category_id`        int         not null comment '项目所在分类id',
-    `item_number`                varchar(25) not null comment '项目年度编号',
     `construction_firm_id`       int comment '建设单位id',
     `agent_construction_firm_id` int comment '代建单位id',
     `cooperate_firm_id`          int comment '配合单位id',
-    `project_parent`             int comment '父级项目id',
     `project_plan_id`            int comment '项目计划id',
     `project_plan_practical_id`  int comment '项目计划实施状况id',
-    `user_id`                    int         not null comment '项目所属用户id',
+    `user_id`                    int       not null comment '项目所属用户id',
     `continue_project_id`        int comment '续建项目id',
     primary key (project_details_id),
     index (user_id),
-    index (project_id),
-    unique index (create_time)
+    index (project_id)
 ) engine = innodb
   default char set utf8mb4 comment '项目详情表';
 # 登录日志表
@@ -275,7 +269,7 @@ create table `overview_year_plan`
     `project_class_table_id`      int not null comment '年度项目种类id',
     `overview_year_plan_starts`   int not null comment '年内计划开工数量',
     `overview_year_plan_complete` int not null comment '年内计划竣工数量',
-    `overview_year_plan`   int not null comment '年内计划项目',
+    `overview_year_plan`          int not null comment '年内计划项目',
     primary key (overview_year_plan_id)
 ) engine = innodb
   char set utf8mb4 comment '年度项目总览表';
