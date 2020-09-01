@@ -57,7 +57,8 @@ public enum CustomResponseEnum {
     GET_STATISTICS_PROJECT_TYPE_FAILURE(500,"获取项目类型统计失败"),
 
     GET_PROJECT_BY_ID_OK(200,"获取项目详情信息成功"),
-    GET_PROJECT_BY_ID_FAILURE(200,"获取项目详情信息失败");
+    GET_PROJECT_BY_ID_Null(500,"项目id缺少或者为0"),
+    GET_PROJECT_BY_ID_FAILURE(404,"获取项目详情信息失败");
 
 
 

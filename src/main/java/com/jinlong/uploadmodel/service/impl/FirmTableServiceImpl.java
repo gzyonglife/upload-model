@@ -15,6 +15,7 @@ public class FirmTableServiceImpl implements FirmTableService {
 
     @Override
     public FirmTable getFirmTableById(Integer firmId) {
-        return firmTableDao.selectById(firmId);
+        FirmTable firmTable = firmTableDao.selectById(firmId);
+        return firmTable;
     }
 }

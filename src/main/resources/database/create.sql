@@ -122,7 +122,7 @@ drop table if exists `firm_table`;
 create table `firm_table`
 (
     `firm_id`    int         not null auto_increment comment '单位id',
-    `firm_name`  varchar(25) not null comment '单位名称',
+    `firm_name`  varchar(255) not null comment '单位名称',
     `firm_phone` varchar(25) comment '联系方式',
     primary key (firm_id)
 ) engine = innodb

@@ -141,13 +141,17 @@ public class ProjectController {
         }
         ProjectsVo projectsVo = new ProjectsVo();
         ProjectVo projectVo = result.get();
+        if(id==null||id==0){
+            return ResponseEntity.createFromEnum(CustomResponseEnum.GET_PROJECT_BY_ID_Null);
+        }
         projectsVo.setProjectName(projectVo.getProjectName());
         projectsVo.setProjectId(projectVo.getProjectId());
-        projectsVo.setCateGoryName(projectCategoryService.getProjectCategoryById(projectVo.getProjectId()).getProjectCategoryName());
+        projectsVo.setLongitudeAndLatitude(projectVo.getLongitudeAndLatitude());
+        projectsVo.setCateGoryName(projectCategoryService.getProjectCategoryById(projectVo.getProjectCategoryId()).getProjectCategoryName());
         projectsVo.setFocus(projectVo.getIsFocus()==1?true:false);
         ProjectDetailsTable projectDetailsTable = projectDetailsTableService.getProjectDetailsTableById(projectVo.getProjectId());
         List<ProjectPlanTable> projectPlanTableList = projectPlanService.getPlanForProjectIds(projectVo.getProjectId());
-        projectsVo.setBuild(firmTableService.getFirmTableById(projectDetailsTable.getCooperateFirmId()));
+        projectsVo.setBuild(firmTableService.getFirmTableById(projectDetailsTable.getConstructionFirmId()));
         projectsVo.setAgentConstruction(firmTableService.getFirmTableById(projectDetailsTable.getAgentConstructionFirmId()));
         projectsVo.setCoordination(firmTableService.getFirmTableById(projectDetailsTable.getCooperateFirmId()));
         for(ProjectPlanTable planTable:projectPlanTableList){

@@ -236,7 +236,7 @@ public class ProjectServiceImpl implements ProjectService {
             projectTable.setItemNumber(year);
         }
         projectTableQueryWrapper.setEntity(projectTable);
-        Page<ProjectTable> tablePage = projectDao.selectPage(page, projectTableQueryWrapper);
+        Page<ProjectTable> tablePage = projectDao.selectPage(page, projectTableQueryWrapper.lt("length(item_number)",4));
         PageVo<ProjectVo> pageVo = BeanBeanHelpUtils.copyProperties(tablePage, PageVo.class);
         pageVo.setData(BeanBeanHelpUtils.copyList(tablePage.getRecords(),ProjectVo.class));
         return pageVo;

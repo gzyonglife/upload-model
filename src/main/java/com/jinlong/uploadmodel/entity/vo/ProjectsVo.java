@@ -79,4 +79,8 @@ public class ProjectsVo {
      * 本月实际进度
      */
     private String actual;
+    /**
+     * 项目位置经纬度
+     */
+    private String LongitudeAndLatitude;
 }

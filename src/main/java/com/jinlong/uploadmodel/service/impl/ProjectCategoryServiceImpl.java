@@ -65,7 +65,7 @@ public class ProjectCategoryServiceImpl implements ProjectCategoryService {
     public ProjectCategoryVo getProjectCategoryById(Integer id) {
         ProjectCategoryTable table = projectCategoryDao.selectById(id);
         ProjectCategoryVo projectCategoryVo = BeanBeanHelpUtils.copyProperties(table, ProjectCategoryVo.class);
-        Assert.assertNotNull(projectCategoryVo, CustomExceptionEnum.MODIFY_USER_ERROR);
+        Assert.assertNotNull(projectCategoryVo, CustomExceptionEnum.GET_NONE);
         return projectCategoryVo;
     }
 
