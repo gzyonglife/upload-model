@@ -70,9 +70,9 @@ public class ProjectController {
         // 判断是否为超级管理员
         if (userDetails.hasRole("SUPERADMIN")) {
             // 查询所有项目
+            // 查询属于自己的项目
             result = projectService.getProjectListOfPage(pageVo);
         } else {
-            // 查询属于自己的项目
             result = projectService.getProjectListOfPage(pageVo, userDetails.getId());
         }
 
