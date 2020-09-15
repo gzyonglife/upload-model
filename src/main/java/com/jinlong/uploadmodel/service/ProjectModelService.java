@@ -1,5 +1,6 @@
 package com.jinlong.uploadmodel.service;
 
+import com.jinlong.uploadmodel.entity.data.ProjectModelTable;
 import com.jinlong.uploadmodel.entity.vo.ModelShowVo;
 import com.jinlong.uploadmodel.entity.vo.ProjectModelVo;
 import org.springframework.web.multipart.MultipartFile;
@@ -45,4 +46,21 @@ public interface ProjectModelService {
      * @return
      */
     Optional<ProjectModelVo> modifyProjectModelForView(Integer projectModelId, String projectModelView);
+
+    /**
+     * 修改模型信息
+     * @param projectModelId
+     * @param projectId
+     * @param projectModelName
+     * @param projectModelTypeId
+     * @return
+     */
+    Boolean updateModel(Integer projectModelId,Integer projectId,String projectModelName,Integer projectModelTypeId);
+
+    /**
+     * 根据id获取模型信息
+     * @param projectModelId
+     * @return
+     */
+    ProjectModelTable getModelById(Integer projectModelId);
 }

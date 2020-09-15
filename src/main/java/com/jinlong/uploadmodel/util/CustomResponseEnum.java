@@ -49,6 +49,8 @@ public enum CustomResponseEnum {
 
     UPLOAD_PROJECT_MODEL_OK(200, "上传项目模型成功"),
     UPLOAD_PROJECT_MODEL_FAILURE(500, "上传项目模型失败"),
+    UPDATE_PROJECT_MODEL_ERROR(400,"修改模型信息失败"),
+    UPDATE_PROJECT_MODEL_OK(400,"修改模型信息成功"),
     GET_PROJECT_MODEL_OK(200, "获取项目模型成功"),
     GET_PROJECT_MODEL_NOT_EXIST(404, "获取项目模型为空"),
     GET_PROJECT_MODEL_FAILURE(500, "获取项目模型失败"),

@@ -66,7 +66,7 @@ public class ProjectModelController {
             // 获取文件夹
             projectModelVo.setProjectModelPath(projectModelName + "/" + folder[0].getOriginalFilename().substring(0, folder[0].getOriginalFilename().indexOf("/")));
         else
-            projectModelVo.setProjectModelPath(projectModelName + "/" + folder[0].getOriginalFilename().substring(folder[0].getOriginalFilename().lastIndexOf("/")+1));
+            projectModelVo.setProjectModelPath(projectModelName + "/" + folder[0].getOriginalFilename().substring(folder[0].getOriginalFilename().lastIndexOf("/") + 1));
 
         Optional<ProjectModelVo> result = projectModelService.saveProjectModel(projectModelVo, folder);
 
@@ -108,7 +108,7 @@ public class ProjectModelController {
         // 判断是否有该项目的权限
         List<ModelShowVo> result = projectModelService.getProjectModelList();
 
-        if (result.isEmpty()){
+        if (result.isEmpty()) {
             return ResponseEntity
                     .createFromEnum(CustomResponseEnum.GET_PROJECT_MODEL_NOT_EXIST);
         }
@@ -137,6 +137,38 @@ public class ProjectModelController {
                 .code(CustomResponseEnum.GET_PROJECT_CATEGORY_LIST_OK.getCode())
                 .message(CustomResponseEnum.GET_PROJECT_CATEGORY_LIST_OK.getMessage())
                 .data(result.get())
+                .build();
+    }
+
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN','ADMIN')")
+    @ResponseBody
+    @PostMapping("/updateModel")
+    ResponseEntity<?> updateModel(@RequestParam(name = "projectModelId") Integer projectModelId,
+                                  @RequestParam(name = "projectId", required = false) Integer projectId,
+                                  @RequestParam(name = "projectModelName", required = false) String projectModelName,
+                                  @RequestParam(name = "projectModelTypeId", required = false) Integer projectModelTypeId,
+                                  @AuthenticationPrincipal UserDetails userDetails) {
+        Boolean modelBool = projectModelService.updateModel(projectModelId, projectId, projectModelName, projectModelTypeId);
+        if (modelBool) {
+            return ResponseEntity
+                    .builder()
+                    .code(CustomResponseEnum.UPDATE_PROJECT_MODEL_OK.getCode())
+                    .message(CustomResponseEnum.UPDATE_PROJECT_MODEL_OK.getMessage())
+                    .data(null)
+                    .build();
+        }
+        return ResponseEntity.createFromEnum(CustomResponseEnum.UPDATE_PROJECT_MODEL_ERROR);
+    }
+
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN','ADMIN')")
+    @PostMapping("/getModelId")
+    ResponseEntity<?> getModelById(@RequestParam(name = "projectModelId") Integer projectModelId,
+                                   @AuthenticationPrincipal UserDetails userDetails) {
+        return ResponseEntity
+                .builder()
+                .code(CustomResponseEnum.GET_PROJECT_MODEL_OK.getCode())
+                .message(CustomResponseEnum.GET_PROJECT_MODEL_OK.getMessage())
+                .data(projectModelService.getModelById(projectModelId))
                 .build();
     }
 }

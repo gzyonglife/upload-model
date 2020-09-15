@@ -174,6 +174,37 @@ public class ProjectModelServiceImpl implements ProjectModelService {
         projectModelTableDao.updateById(projectModelTable);
         return Optional.ofNullable(BeanBeanHelpUtils.copyProperties(projectModelTable, ProjectModelVo.class));
     }
+    /**
+     * 修改模型信息
+     * @param projectModelId
+     * @param projectId
+     * @param projectModelName
+     * @param projectModelTypeId
+     * @return
+     */
+    @Override
+    public Boolean updateModel(Integer projectModelId,Integer projectId, String projectModelName, Integer projectModelTypeId) {
+        ProjectModelTable model = projectModelTableDao.selectById(projectModelId);
+        if(projectId!=null&&projectId!=0){
+            model.setProjectId(projectId);
+        }
+        if(projectModelName!=null&&!projectModelName.equals("")){
+            model.setProjectModelName(projectModelName);
+        }
+        if(projectModelTypeId!=null&&projectModelTypeId!=0){
+            model.setProjectModelTypeId(projectModelTypeId);
+        }
+        return projectModelTableDao.updateById(model)==1?true:false;
+    }
+    /**
+     * 根据id获取模型信息
+     * @param projectModelId
+     * @return
+     */
+    @Override
+    public ProjectModelTable getModelById(Integer projectModelId) {
+        return projectModelTableDao.selectById(projectModelId);
+    }
 
     private String getProjectModelName(MultipartFile file) {
         String fileName = file.getOriginalFilename();
