@@ -1,6 +1,8 @@
 package com.jinlong.uploadmodel.service;
 
 import com.jinlong.uploadmodel.entity.data.ProjectPlanTable;
+import com.jinlong.uploadmodel.entity.vo.PageVo;
+import com.jinlong.uploadmodel.entity.vo.ProjectPlanTableVo;
 import com.jinlong.uploadmodel.entity.vo.ProjectPlanVo;
 
 import java.util.List;
@@ -35,4 +37,12 @@ public interface ProjectPlanService {
      * @return
      */
     Integer createPlan(ProjectPlanVo projectPlanVo);
+
+
+    /**
+     * 获取所有的项目计划
+     *
+     * @return
+     */
+    PageVo<ProjectPlanTableVo> getPlanForProject(PageVo pageVo);
 }

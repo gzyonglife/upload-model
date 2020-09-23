@@ -1,7 +1,9 @@
 package com.jinlong.uploadmodel.controller;
 
 import com.jinlong.uploadmodel.entity.access.UserDetails;
+import com.jinlong.uploadmodel.entity.vo.PageVo;
 import com.jinlong.uploadmodel.entity.vo.ProjectPlanVo;
+import com.jinlong.uploadmodel.entity.vo.ProjectVo;
 import com.jinlong.uploadmodel.entity.vo.ResponseEntity;
 import com.jinlong.uploadmodel.service.ProjectPlanService;
 import com.jinlong.uploadmodel.service.ProjectService;
@@ -105,4 +107,30 @@ public class ProjectPlanController {
                 .data(planId)
                 .build();
     }
+
+
+    /**
+     * 获取项目计划实施信息
+     *
+     * @return
+     */
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN','ADMIN')")
+    @GetMapping("getPlan/project")
+    public ResponseEntity<?> getPlan(@RequestParam(name = "current") @Validated @NotNull(message = "current不为空") Long current,
+                                     @RequestParam(name = "size") @Validated @NotNull(message = "current不为空") Long size,
+                                     @AuthenticationPrincipal UserDetails userDetails){
+        PageVo<Object> pageVo = new PageVo<>();
+        pageVo.setCurrent(current);
+        pageVo.setSize(size);
+        if(projectPlanService.getPlanForProject(pageVo)==null){
+            return ResponseEntity.createFromEnum(CustomResponseEnum.GET_PROJECT_PLAN_FAILURE);
+        }
+        return ResponseEntity
+                .builder()
+                .code(CustomResponseEnum.GET_PROJECT_PLAN_OK.getCode())
+                .message(CustomResponseEnum.GET_PROJECT_PLAN_OK.getMessage())
+                .data(projectPlanService.getPlanForProject(pageVo))
+                .build();
+    }
+
 }

@@ -1,13 +1,17 @@
 package com.jinlong.uploadmodel.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jinlong.uploadmodel.dao.ProjectDetailsTableDao;
 import com.jinlong.uploadmodel.dao.ProjectPlanTableDao;
 import com.jinlong.uploadmodel.dao.ProjectTableDao;
 import com.jinlong.uploadmodel.entity.data.ProjectDetailsTable;
 import com.jinlong.uploadmodel.entity.data.ProjectPlanTable;
 import com.jinlong.uploadmodel.entity.data.ProjectTable;
+import com.jinlong.uploadmodel.entity.vo.PageVo;
+import com.jinlong.uploadmodel.entity.vo.ProjectPlanTableVo;
 import com.jinlong.uploadmodel.entity.vo.ProjectPlanVo;
+import com.jinlong.uploadmodel.entity.vo.ProjectVo;
 import com.jinlong.uploadmodel.service.ProjectPlanService;
 import com.jinlong.uploadmodel.util.Assert;
 import com.jinlong.uploadmodel.util.BeanBeanHelpUtils;
@@ -17,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,6 +56,7 @@ public class ProjectPlanServiceImpl implements ProjectPlanService {
         ProjectPlanTable planTable = projectPlanDao.selectById(projectPlanId);
         return BeanBeanHelpUtils.copyProperties(planTable, ProjectPlanVo.class);
     }
+
     /**
      * 获取项目计划实施信息
      *
@@ -59,11 +65,12 @@ public class ProjectPlanServiceImpl implements ProjectPlanService {
      */
     @Override
     public List<ProjectPlanTable> getPlanForProjectIds(Integer projectId) {
-        Map<String,Object> map = new HashMap<String,Object>();
-        map.put("project_id",projectId);
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("project_id", projectId);
         List<ProjectPlanTable> list = projectPlanDao.selectByMap(map);
         return list;
     }
+
     /**
      * 添加项目计划实施信息
      *
@@ -102,5 +109,23 @@ public class ProjectPlanServiceImpl implements ProjectPlanService {
 
 
         return projectPlanId;
+    }
+
+    @Override
+    public PageVo<ProjectPlanTableVo> getPlanForProject(PageVo pageVo) {
+        Page<ProjectPlanTable> tablePage = projectPlanDao.selectPage(new Page<>(pageVo.getCurrent(), pageVo.getSize())
+                , new QueryWrapper<>());
+        List<ProjectPlanTableVo> planVo = PageVo.createPageVoOfPage(tablePage, ProjectPlanTableVo.class).getData();
+        List<ProjectPlanTableVo> planVos = new ArrayList<ProjectPlanTableVo>();
+        if(planVo==null||planVo.size()==0){
+            return null;
+        }
+        for(ProjectPlanTableVo list:planVo){
+            list.setProjectName(projectDao.selectById(list.getProjectId()).getProjectName());
+            planVos.add(list);
+        }
+        PageVo<ProjectPlanTableVo> pagevoplan = PageVo.createPageVoOfPage(tablePage, ProjectPlanTableVo.class);
+        pagevoplan.setData(planVos);
+        return pagevoplan;
     }
 }
