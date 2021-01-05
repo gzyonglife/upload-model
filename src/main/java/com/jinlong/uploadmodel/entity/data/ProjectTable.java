@@ -58,26 +58,9 @@ public class ProjectTable implements Serializable {
     private Date createTime;
 
     /**
-     * 项目备注
-     */
-    private String projectNote;
-
-    /**
-     * 项目年度编号
-     */
-    private String itemNumber;
-    /**
-     * 重点关注
-     */
-    private Integer isFocus;
-    /**
      * 项目位置经纬度
      */
     private String LongitudeAndLatitude;
-    /**
-     * 项目视角
-     */
-    private String projectView;
 
     /**
      * 缩略图地址

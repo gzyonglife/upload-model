@@ -9,6 +9,7 @@ import com.jinlong.uploadmodel.entity.data.ProjectDetailsTable;
 import com.jinlong.uploadmodel.entity.data.ProjectTable;
 import com.jinlong.uploadmodel.entity.vo.PageVo;
 import com.jinlong.uploadmodel.entity.vo.ProjectVo;
+import com.jinlong.uploadmodel.service.ProjectClassTableService;
 import com.jinlong.uploadmodel.service.ProjectService;
 import com.jinlong.uploadmodel.util.Assert;
 import com.jinlong.uploadmodel.util.BeanBeanHelpUtils;
@@ -41,6 +42,7 @@ public class ProjectServiceImpl implements ProjectService {
     ProjectZoneSelector projectZoneSelector;
 
 
+
     /**
      * 获取项目列表
      *
@@ -51,7 +53,7 @@ public class ProjectServiceImpl implements ProjectService {
     public PageVo<ProjectVo> getProjectListOfPage(PageVo pageVo) {
         Page<ProjectTable> tablePage = projectDao.selectPage(
                 new Page<>(pageVo.getCurrent(), pageVo.getSize())
-                , new QueryWrapper<>());
+                , new QueryWrapper<ProjectTable>().orderByDesc("create_time"));
         return PageVo.createPageVoOfPage(tablePage, ProjectVo.class);
     }
 
@@ -66,7 +68,8 @@ public class ProjectServiceImpl implements ProjectService {
     public PageVo<ProjectVo> getProjectListOfPage(PageVo pageVo, Integer userId) {
         Page<ProjectTable> tablePage = projectDao.selectPage(
                 new Page<>(pageVo.getCurrent(), pageVo.getSize())
-                , new QueryWrapper<ProjectTable>().eq("user_id", userId));
+                , new QueryWrapper<ProjectTable>().eq("user_id", userId).orderByDesc("create_time"));
+
         return PageVo.createPageVoOfPage(tablePage, ProjectVo.class);
     }
 
@@ -186,6 +189,9 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public Optional<ProjectVo> getProjectById(Integer id) {
         ProjectTable projectTable = projectDao.selectById(id);
+        if(projectTable==null){
+            return null;
+        }
         ProjectVo projectVo = BeanBeanHelpUtils.copyProperties(projectTable, ProjectVo.class);
         return Optional.ofNullable(projectVo);
     }
@@ -232,14 +238,29 @@ public class ProjectServiceImpl implements ProjectService {
             projectTableQueryWrapper.like("project_name", name);
         }
 
-        if (year != null) {
-            projectTable.setItemNumber(year);
-        }
+
         projectTableQueryWrapper.setEntity(projectTable);
-        Page<ProjectTable> tablePage = projectDao.selectPage(page, projectTableQueryWrapper.lt("length(item_number)",4));
+        Page<ProjectTable> tablePage = projectDao.selectPage(page, projectTableQueryWrapper.orderByDesc("create_time"));
         PageVo<ProjectVo> pageVo = BeanBeanHelpUtils.copyProperties(tablePage, PageVo.class);
         pageVo.setData(BeanBeanHelpUtils.copyList(tablePage.getRecords(),ProjectVo.class));
         return pageVo;
+    }
+
+    @Override
+    public Boolean delPeojectAll(List list) {
+        return projectDao.deleteBatchIds(list)>0;
+    }
+
+    @Override
+    public ProjectVo updateProject(ProjectVo projectVo) {
+        ProjectTable entity = projectDao.selectById(projectVo.getProjectId());
+        entity.setProjectZoneId(projectZoneSelector.getProjectZoneId());
+        File file = new File(projectZoneSelector.getProjectZonePathById(entity.getProjectZoneId()) + "/" + entity.getProjectName());
+        file.renameTo(new File(projectZoneSelector.getProjectZonePathById(entity.getProjectZoneId()) + "/" + projectVo.getProjectName()));
+        if(projectDao.updateById(BeanBeanHelpUtils.copyProperties(projectVo, ProjectTable.class))==1?true:false){
+            return projectVo;
+        }
+        return null;
     }
 
     @Override

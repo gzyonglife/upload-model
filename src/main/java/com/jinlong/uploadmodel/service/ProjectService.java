@@ -109,4 +109,19 @@ public interface ProjectService {
      * @return
      */
     PageVo<ProjectVo> searchProjectForPage(Integer projectCategoryId, String name, String year, Integer current, Integer size);
+
+    /**
+     * 批量删除项目
+     * @param list
+     * @return
+     */
+    Boolean delPeojectAll(List list);
+
+    /**
+     * 修改项目信息
+     * @param projectVo
+     * @return
+     */
+    ProjectVo updateProject(ProjectVo projectVo);
+
 }

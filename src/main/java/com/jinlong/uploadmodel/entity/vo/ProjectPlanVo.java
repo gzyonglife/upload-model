@@ -2,6 +2,7 @@ package com.jinlong.uploadmodel.entity.vo;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
@@ -114,5 +115,20 @@ public class ProjectPlanVo {
      */
     @NotNull(message = "planType是必须的")
     private Boolean planType;
+
+    /**
+     * 重点关注
+     */
+    private Integer isFocus;
+    /**
+     * 项目备注
+     */
+    private String projectNote;
+
+    /**
+     * 项目年度编号
+     */
+    @NotEmpty(message = "itemNumber是必须的")
+    private String itemNumber;
 
 }

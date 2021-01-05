@@ -39,7 +39,7 @@ public class ProjectModelController {
     @Autowired
     UserService userService;
 
-    @PreAuthorize("hasAnyAuthority('SUPERADMIN','ADMIN')")
+    //@PreAuthorize("hasAnyAuthority('SUPERADMIN','ADMIN')")
     @ResponseBody
     @PostMapping("/uploadFolder")
     public ResponseEntity<?> uploadFolder(
@@ -59,7 +59,7 @@ public class ProjectModelController {
 
         projectModelVo.setProjectModelName(projectModelName);
         projectModelVo.setProjectModelTime(projectModelTime);
-        projectModelVo.setCreateUserId(userDetails.getId());
+        //projectModelVo.setCreateUserId(userDetails.getId());
 
         // 判断是否为文件夹
         if (projectModelTypeService.isFolder(projectModelTypeId))
@@ -169,6 +169,16 @@ public class ProjectModelController {
                 .code(CustomResponseEnum.GET_PROJECT_MODEL_OK.getCode())
                 .message(CustomResponseEnum.GET_PROJECT_MODEL_OK.getMessage())
                 .data(projectModelService.getModelById(projectModelId))
+                .build();
+    }
+
+    @GetMapping("/delModelId")
+    ResponseEntity<?> delModelId(){
+        return ResponseEntity
+                .builder()
+                .code(CustomResponseEnum.GET_PROJECT_MODEL_OK.getCode())
+                .message(CustomResponseEnum.GET_PROJECT_MODEL_OK.getMessage())
+                .data(null)
                 .build();
     }
 }

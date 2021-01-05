@@ -23,7 +23,7 @@ public class ProjectModelTypeController {
     @Autowired
     ProjectModelTypeService projectModelTypeService;
 
-    @PreAuthorize("hasAnyAuthority('SUPERADMIN','ADMIN')")
+    //@PreAuthorize("hasAnyAuthority('SUPERADMIN','ADMIN')")
     @ResponseBody
     @GetMapping("getProjectModelType/all")
     public ResponseEntity<?> getProjectModelTypeList() {

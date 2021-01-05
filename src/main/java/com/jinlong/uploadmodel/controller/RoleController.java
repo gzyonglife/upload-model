@@ -25,7 +25,7 @@ public class RoleController {
     @Autowired
     RoleService roleService;
 
-    @PreAuthorize("hasAuthority('SUPERADMIN')")
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN','ADMIN')")
     @GetMapping("getRole/all")
     public ResponseEntity<?> getRoleList() {
         List<RoleVo> roleVoList = roleService.getRoleList();

@@ -35,6 +35,11 @@ public enum CustomResponseEnum {
     GET_PROJECT_OK(200, "获取项目列表成功"),
     CREATE_PROJECT_FAILURE(500, "创建项目失败"),
     CREATE_PROJECT_OK(200, "新建项目成功"),
+    DEL_PROJECT_LIST_OK(200,"删除成功"),
+    DEL_PROJECT_LIST_FAILURE(501,"数组为空"),
+    DEL_PROJECT_LIST_NO(501,"删除失败"),
+    UPDATE_PROJECT_OK(200,"修改项目信息成功"),
+    UPDATE_PROJECT_FAILURE(200,"修改项目信息失败"),
 
     GET_PROJECT_MODEL_TYPE_OK(200, "获取项目类型列表成功"),
     GET_PROJECT_MODEL_TYPE_FAILURE(204, "未获取到项目类型列表"),
@@ -46,6 +51,11 @@ public enum CustomResponseEnum {
     GET_PROJECT_CATEGORY_OK(200, "获取项目分类列表成功"),
     CREATE_PROJECT_CATEGORY_FAILURE(500, "创建项目分类失败"),
     CREATE_PROJECT_CATEGORY_OK(200, "新建项目分类成功"),
+    DEL_PROJECTCATEGORY_LIST_NO(501,"删除失败"),
+    DEL_PROJECTCATEGORY_LIST_OK(200,"删除成功"),
+    UPDATE_PROJECTCATEGORY_OK(200,"修改成功"),
+    UPDATE_PROJECTCATEGORY_NO(501,"修改失败"),
+
 
     UPLOAD_PROJECT_MODEL_OK(200, "上传项目模型成功"),
     UPLOAD_PROJECT_MODEL_FAILURE(500, "上传项目模型失败"),
@@ -54,6 +64,8 @@ public enum CustomResponseEnum {
     GET_PROJECT_MODEL_OK(200, "获取项目模型成功"),
     GET_PROJECT_MODEL_NOT_EXIST(404, "获取项目模型为空"),
     GET_PROJECT_MODEL_FAILURE(500, "获取项目模型失败"),
+    DEL_PROJECT_MODEL_NOT_OK(200, "删除模型成功"),
+    DEL_PROJECT_MODEL_ERROR(501, "删除模型失败"),
 
     GET_STATISTICS_PROJECT_TYPE_OK(200,"获取项目类型统计"),
     GET_STATISTICS_PROJECT_TYPE_FAILURE(500,"获取项目类型统计失败"),

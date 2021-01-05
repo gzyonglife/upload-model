@@ -55,8 +55,25 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/**/*.js"
                 ).permitAll()
                 // 对于获取token的rest api要允许匿名访问
-                .antMatchers("/auth/**","/projectMode/**").permitAll()
+                .antMatchers(
+                        "/auth/**",
+                        "/projectMode/**",
+                        "/project/search/project",
+                        "/project/**/**",
+                        "/**"
+                ).permitAll()
+                .antMatchers(
+                        "/project/**/**",
+                        "/projectMode/**",
+                        "/project/search/project",
+                        "/**"
+                ).permitAll()
+                // post预检不鉴权
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
                 // 除上面外的所有请求全部需要鉴权认证
+        .and()
+                .authorizeRequests()
                 .anyRequest().authenticated();
             // 开启登录页
 //        http.formLogin();

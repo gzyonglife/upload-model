@@ -121,4 +121,17 @@ public class ProjectPlanTable implements Serializable {
      */
     private Boolean planType;
 
+    /**
+     * 项目备注
+     */
+    private String projectNote;
+
+    /**
+     * 项目年度编号
+     */
+    private String itemNumber;
+    /**
+     * 重点关注
+     */
+
 }

@@ -39,7 +39,7 @@ public class UserController {
      * @param user
      * @return
      */
-    @PreAuthorize("hasAuthority('SUPERADMIN')")
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN','ADMIN')")
     @PostMapping("register")
     public ResponseEntity<?> register(
             @RequestBody @Validated RegisterVo registerVo,
@@ -62,7 +62,7 @@ public class UserController {
      * @param loginName
      * @return
      */
-    @PreAuthorize("hasAuthority('SUPERADMIN')")
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN','ADMIN')")
     @GetMapping("existLoginName")
     public boolean existLoginName(@RequestParam @Validated @NotEmpty(message = "loginName不能为空") String loginName) {
         // 判断是否存在该用户名
@@ -110,7 +110,7 @@ public class UserController {
      * @param user
      * @return
      */
-    @PreAuthorize("hasAuthority('SUPERADMIN')")
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN','ADMIN')")
     @GetMapping("getUser/all")
     public ResponseEntity<?> getUserList(
             @RequestBody @Validated PageVo pageVo,
@@ -133,7 +133,7 @@ public class UserController {
      * @param id
      * @return
      */
-    @PreAuthorize("hasAuthority('SUPERADMIN')")
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN','ADMIN')")
     @GetMapping("getUser/id")
     public ResponseEntity<?> getUserById(
             @RequestParam @Validated @NotNull(message = "id不可为空") Integer id) {

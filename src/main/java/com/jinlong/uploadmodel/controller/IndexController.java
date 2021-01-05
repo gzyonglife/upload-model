@@ -50,7 +50,7 @@ public class IndexController {
 
     @Autowired
     ProjectService projectService;
-    @PreAuthorize("hasAuthority('SUPERADMIN')")
+    @PreAuthorize("hasAnyAuthority('SUPERADMIN','ADMIN')")
     @GetMapping("getProjectCategory/all")
     public ResponseEntity<?> getStatisticsProjectType() {
         IndexVo indexVo = new IndexVo();

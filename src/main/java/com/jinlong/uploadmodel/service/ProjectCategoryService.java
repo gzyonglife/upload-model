@@ -1,5 +1,6 @@
 package com.jinlong.uploadmodel.service;
 
+import com.jinlong.uploadmodel.entity.data.ProjectCategoryTable;
 import com.jinlong.uploadmodel.entity.vo.ProjectCategoryVo;
 
 import java.util.List;
@@ -41,4 +42,23 @@ public interface ProjectCategoryService {
      * @return
      */
     List<ProjectCategoryVo> getProjectCategoryByParentCategoryId(Integer id);
+
+    /**
+     * 根据名称查找分类 没有则创建
+     * @param projectCategoryName
+     * @return
+     */
+    int getProjectCategoryByadd(String projectCategoryName);
+
+    /**
+     * 批量删除分类
+     * @param list
+     * @return
+     */
+    Boolean delProjectCategoryAll(List list);
+
+    Boolean updateProjectCategory(ProjectCategoryTable projectCate);
+
+
+
 }

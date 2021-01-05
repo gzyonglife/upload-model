@@ -3,6 +3,7 @@ package com.jinlong.uploadmodel.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jinlong.uploadmodel.dao.ProjectCategoryTableDao;
 import com.jinlong.uploadmodel.entity.data.ProjectCategoryTable;
+import com.jinlong.uploadmodel.entity.data.ProjectTable;
 import com.jinlong.uploadmodel.entity.vo.ProjectCategoryVo;
 import com.jinlong.uploadmodel.service.ProjectCategoryService;
 import com.jinlong.uploadmodel.util.Assert;
@@ -84,5 +85,27 @@ public class ProjectCategoryServiceImpl implements ProjectCategoryService {
         List<ProjectCategoryVo> categoryVos = BeanBeanHelpUtils.copyList(categoryTables, ProjectCategoryVo.class);
         Assert.assertCollectionNotEmpty(categoryVos,CustomExceptionEnum.SERVER_ERROR);
         return categoryVos;
+    }
+
+    @Override
+    public int getProjectCategoryByadd(String projectCategoryName) {
+        List<ProjectCategoryTable> projectCategoryTable = projectCategoryDao.selectList(new QueryWrapper<ProjectCategoryTable>().eq("project_category_name", projectCategoryName).last("limit 0,1"));
+        if(projectCategoryTable.size()>0){
+            return projectCategoryTable.get(0).getProjectCategoryId();
+        }
+        ProjectCategoryTable pro = new ProjectCategoryTable();
+        pro.setProjectCategoryName(projectCategoryName);
+        projectCategoryDao.insert(pro);
+        return projectCategoryDao.selectList(new QueryWrapper<ProjectCategoryTable>().eq("project_category_name", projectCategoryName).last("limit 0,1")).get(0).getProjectCategoryId();
+    }
+
+    @Override
+    public Boolean delProjectCategoryAll(List list) {
+        return projectCategoryDao.deleteBatchIds(list)>0;
+    }
+
+    @Override
+    public Boolean updateProjectCategory(ProjectCategoryTable projectCate) {
+        return projectCategoryDao.updateById(projectCate)>0;
     }
 }

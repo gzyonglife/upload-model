@@ -40,6 +40,10 @@ public class ProjectVo {
      */
     private Integer projectParent;
     /**
+     * 父级项目名称
+     */
+    private String projectParentName;
+    /**
      * 项目类型id
      */
     @NotNull(message = "projectCategoryId是必须的")
@@ -50,20 +54,7 @@ public class ProjectVo {
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
-    /**
-     * 重点关注
-     */
-    private Integer isFocus;
-    /**
-     * 项目备注
-     */
-    private String projectNote;
 
-    /**
-     * 项目年度编号
-     */
-    @NotEmpty(message = "itemNumber是必须的")
-    private String itemNumber;
 
     /**
      * 项目类型名称
@@ -74,10 +65,6 @@ public class ProjectVo {
      * 项目位置经纬度
      */
     private String LongitudeAndLatitude;
-    /**
-     * 项目视角
-     */
-    private String projectView;
     /**
      * 缩略图地址
      */
