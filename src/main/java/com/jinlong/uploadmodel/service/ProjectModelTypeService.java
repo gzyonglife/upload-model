@@ -24,4 +24,5 @@ public interface ProjectModelTypeService {
      * @return
      */
     boolean isFolder(Integer typeId);
+
 }

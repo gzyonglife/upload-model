@@ -31,7 +31,9 @@ public class RedisTokenUtils {
      * @return
      */
     public boolean pushJwtUser(UserDetails userDetails) {
-        redisHash.put(accessKey, hashKeyPrefix + userDetails.getId(), JSON.toJSONString(userDetails));
+        String value = JSON.toJSONString(userDetails);
+        log.debug(value);
+        redisHash.put(accessKey, hashKeyPrefix + userDetails.getId(), value);
         return true;
     }
 

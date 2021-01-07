@@ -1,19 +1,23 @@
 package com.jinlong.uploadmodel.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jinlong.uploadmodel.config.selector.ProjectZoneSelector;
 import com.jinlong.uploadmodel.dao.ProjectModelTableDao;
 import com.jinlong.uploadmodel.dao.ProjectModelTypeTableDao;
 import com.jinlong.uploadmodel.dao.ProjectTableDao;
+import com.jinlong.uploadmodel.dao.ProjectZoneTableDao;
 import com.jinlong.uploadmodel.entity.data.ProjectModelTable;
 import com.jinlong.uploadmodel.entity.data.ProjectTable;
 import com.jinlong.uploadmodel.entity.vo.ModelShowVo;
+import com.jinlong.uploadmodel.entity.vo.PageVo;
 import com.jinlong.uploadmodel.entity.vo.ProjectModelVo;
 import com.jinlong.uploadmodel.service.ProjectModelService;
 import com.jinlong.uploadmodel.service.ProjectModelTypeService;
 import com.jinlong.uploadmodel.util.Assert;
 import com.jinlong.uploadmodel.util.BeanBeanHelpUtils;
 import com.jinlong.uploadmodel.util.CustomExceptionEnum;
+import com.jinlong.uploadmodel.util.TextUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,7 +44,6 @@ public class ProjectModelServiceImpl implements ProjectModelService {
     @Autowired
     ProjectModelTableDao projectModelTableDao;
 
-
     @Autowired
     ProjectModelTypeService projectModelTypeService;
 
@@ -49,6 +52,9 @@ public class ProjectModelServiceImpl implements ProjectModelService {
 
     @Autowired
     ProjectZoneSelector projectZoneSelector;
+
+    @Autowired
+    ProjectZoneTableDao projectZoneTableDao;
 
     /**
      * 上传模型
@@ -143,20 +149,41 @@ public class ProjectModelServiceImpl implements ProjectModelService {
      * @return
      */
     @Override
-    public List<ModelShowVo> getProjectModelList() {
-        ArrayList<ModelShowVo> result = new ArrayList<>();
-        // 查询所有项目id
-        List<ProjectTable> projectTableList = projectTableDao.selectList(new QueryWrapper<ProjectTable>().select("project_id"));
-        // 断言有项目数据信息
-        Assert.assertCollectionNotEmpty(projectTableList, CustomExceptionEnum.GET_NONE);
-        // 遍历查询模型
-        for (ProjectTable projectTable : projectTableList) {
-            result.addAll(getProjectModelListByProjectId(projectTable.getProjectId()));
+    public PageVo<ModelShowVo> getProjectModelList(Integer type, Integer current, Integer size) {
+        if(type==1){
+            PageVo<ModelShowVo> pageVo = new PageVo<>();
+            List<ModelShowVo> list = new ArrayList<>();
+            for(ModelShowVo model : BeanBeanHelpUtils.copyList(projectModelTableDao.selectList(new QueryWrapper<ProjectModelTable>().orderByDesc("create_time")),ModelShowVo.class)){
+                if(projectTableDao.selectById(model.getProjectId())!=null){
+                    model.setProjectName(projectTableDao.selectById(model.getProjectId()).getProjectName());
+                }else{
+                    model.setProjectName("项目已被删除");
+                }
+                model.setProjectModelType(projectModelTypeTableDao.selectById(model.getProjectModelTypeId()).getProjectModelType());
+                model.setPort(projectZoneTableDao.selectById(1).getProjectZonePort());
+                list.add(model);
+            }
+            pageVo.setData(list);
+            return pageVo;
+        }else if(type==2){
+            Page<ProjectModelTable> page = new Page<>(current, size);
+            Page<ProjectModelTable> pa = projectModelTableDao.selectPage(page,new QueryWrapper<ProjectModelTable>().orderByDesc("create_time"));
+            PageVo<ModelShowVo> pageVo = BeanBeanHelpUtils.copyProperties(pa, PageVo.class);
+            List<ModelShowVo> list = new ArrayList<>();
+            for(ModelShowVo model : BeanBeanHelpUtils.copyList(pa.getRecords(),ModelShowVo.class)){
+                if(projectTableDao.selectById(model.getProjectId())!=null){
+                    model.setProjectName(projectTableDao.selectById(model.getProjectId()).getProjectName());
+                }else{
+                    model.setProjectName("项目已被删除");
+                }
+                model.setProjectModelType(projectModelTypeTableDao.selectById(model.getProjectModelTypeId()).getProjectModelType());
+                model.setPort(projectZoneTableDao.selectById(1).getProjectZonePort());
+                list.add(model);
+            }
+            pageVo.setData(list);
+            return pageVo;
         }
-        if (!result.isEmpty()){
-            return result;
-        }
-        return Collections.emptyList();
+        return null;
     }
 
     /**
@@ -202,8 +229,63 @@ public class ProjectModelServiceImpl implements ProjectModelService {
      * @return
      */
     @Override
-    public ProjectModelTable getModelById(Integer projectModelId) {
-        return projectModelTableDao.selectById(projectModelId);
+    public ModelShowVo getModelById(Integer projectModelId) {
+        ModelShowVo show = BeanBeanHelpUtils.copyProperties(projectModelTableDao.selectById(projectModelId), ModelShowVo.class);
+        if(projectTableDao.selectById(show.getProjectId())!=null){
+            show.setProjectName(projectTableDao.selectById(show.getProjectId()).getProjectName());
+        }else{
+            show.setProjectName("项目已被删除");
+        }
+        return show;
+    }
+
+    /**
+     * 根据id删除文件
+     * @param typeId
+     * @return
+     */
+    @Override
+    public Boolean delModelType(List typeId) {
+
+        List<ProjectModelTable> projectModelTable = projectModelTableDao.selectBatchIds(typeId);
+        for(ProjectModelTable pro : projectModelTable){
+            File folder = new File(
+                    projectZoneTableDao.selectList(new QueryWrapper<>()).get(0).getProjectZonePath()+"/"+
+                            projectTableDao.selectById(pro.getProjectId()).getProjectName()+"/"+
+                            pro.getProjectModelName());
+            log.debug(projectZoneTableDao.selectList(new QueryWrapper<>()).get(0).getProjectZonePath()+"/"+
+                    projectTableDao.selectById(pro.getProjectId()).getProjectName()+
+                    pro.getProjectModelName());
+            TextUtil.deleteFolder(folder);
+        }
+        return projectModelTableDao.deleteBatchIds(typeId)>=1?true:false;
+    }
+
+    @Override
+    public PageVo<ModelShowVo> getModelByLimt(String modelName, Integer categoryId, Integer size, Integer current) {
+        QueryWrapper<ProjectModelTable> modelWrapper = new QueryWrapper<>();
+        if(modelName!=null&&!(modelName.equals(""))){
+            modelWrapper.like("project_model_name",modelName);
+        }
+        if(categoryId!=null&&categoryId!=0){
+            modelWrapper.like("project_model_type_id",categoryId);
+        }
+        Page<ProjectModelTable> page = new Page<>(current, size);
+        Page<ProjectModelTable> pa = projectModelTableDao.selectPage(page,modelWrapper.orderByDesc("create_time"));
+        PageVo<ModelShowVo> pageVo = BeanBeanHelpUtils.copyProperties(pa, PageVo.class);
+        List<ModelShowVo> list = new ArrayList<>();
+        for(ModelShowVo model : BeanBeanHelpUtils.copyList(pa.getRecords(),ModelShowVo.class)){
+            if(projectTableDao.selectById(model.getProjectId())!=null){
+                model.setProjectName(projectTableDao.selectById(model.getProjectId()).getProjectName());
+            }else{
+                model.setProjectName("项目已被删除");
+            }
+            model.setProjectModelType(projectModelTypeTableDao.selectById(model.getProjectModelTypeId()).getProjectModelType());
+            model.setPort(projectZoneTableDao.selectById(1).getProjectZonePort());
+            list.add(model);
+        }
+        pageVo.setData(list);
+        return pageVo;
     }
 
     private String getProjectModelName(MultipartFile file) {

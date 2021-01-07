@@ -2,6 +2,7 @@ package com.jinlong.uploadmodel.service;
 
 import com.jinlong.uploadmodel.entity.data.ProjectModelTable;
 import com.jinlong.uploadmodel.entity.vo.ModelShowVo;
+import com.jinlong.uploadmodel.entity.vo.PageVo;
 import com.jinlong.uploadmodel.entity.vo.ProjectModelVo;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,10 +35,10 @@ public interface ProjectModelService {
 
     /**
      * 获取所有项目模型
-     *
+     * @param type
      * @return
      */
-    List<ModelShowVo> getProjectModelList();
+    PageVo<ModelShowVo> getProjectModelList(Integer type, Integer current, Integer size);
 
     /**
      * 修改模型视角
@@ -62,5 +63,20 @@ public interface ProjectModelService {
      * @param projectModelId
      * @return
      */
-    ProjectModelTable getModelById(Integer projectModelId);
+    ModelShowVo getModelById(Integer projectModelId);
+
+    /**
+     * 根据id删除文件
+     * @param typeId
+     * @return
+     */
+    Boolean delModelType(List typeId);
+
+    /**
+     * 根据模型名称或者模型分类id模糊查询并分页
+     * @param modelName
+     * @param categoryId
+     * @return
+     */
+    PageVo<ModelShowVo> getModelByLimt(String modelName,Integer categoryId,Integer size,Integer current);
 }

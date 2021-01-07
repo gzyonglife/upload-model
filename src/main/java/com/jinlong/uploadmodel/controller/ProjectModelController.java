@@ -1,7 +1,9 @@
 package com.jinlong.uploadmodel.controller;
 
 import com.jinlong.uploadmodel.entity.access.UserDetails;
+import com.jinlong.uploadmodel.entity.data.ProjectModelTable;
 import com.jinlong.uploadmodel.entity.vo.ModelShowVo;
+import com.jinlong.uploadmodel.entity.vo.PageVo;
 import com.jinlong.uploadmodel.entity.vo.ProjectModelVo;
 import com.jinlong.uploadmodel.entity.vo.ResponseEntity;
 import com.jinlong.uploadmodel.service.ProjectModelService;
@@ -100,18 +102,17 @@ public class ProjectModelController {
         return ResponseEntity.createFromEnum(CustomResponseEnum.GET_PROJECT_MODEL_FAILURE);
     }
 
-    @PreAuthorize("hasAnyAuthority('SUPERADMIN','ADMIN')")
+    //@PreAuthorize("hasAnyAuthority('SUPERADMIN','ADMIN')")
     @ResponseBody
     @GetMapping("/getProjectModel/all")
     ResponseEntity<?> getProjectModelList(
+            Integer size,
+            Integer current,
+            @RequestParam @Validated @NotNull(message = "type不得为空") Integer type,
             @AuthenticationPrincipal UserDetails userDetails) {
         // 判断是否有该项目的权限
-        List<ModelShowVo> result = projectModelService.getProjectModelList();
+        PageVo<ModelShowVo> result = projectModelService.getProjectModelList(type,current,size);
 
-        if (result.isEmpty()) {
-            return ResponseEntity
-                    .createFromEnum(CustomResponseEnum.GET_PROJECT_MODEL_NOT_EXIST);
-        }
 
         return ResponseEntity
                 .builder()
@@ -140,7 +141,7 @@ public class ProjectModelController {
                 .build();
     }
 
-    @PreAuthorize("hasAnyAuthority('SUPERADMIN','ADMIN')")
+    //@PreAuthorize("hasAnyAuthority('SUPERADMIN','ADMIN')")
     @ResponseBody
     @PostMapping("/updateModel")
     ResponseEntity<?> updateModel(@RequestParam(name = "projectModelId") Integer projectModelId,
@@ -160,7 +161,7 @@ public class ProjectModelController {
         return ResponseEntity.createFromEnum(CustomResponseEnum.UPDATE_PROJECT_MODEL_ERROR);
     }
 
-    @PreAuthorize("hasAnyAuthority('SUPERADMIN','ADMIN')")
+    //@PreAuthorize("hasAnyAuthority('SUPERADMIN','ADMIN')")
     @PostMapping("/getModelId")
     ResponseEntity<?> getModelById(@RequestParam(name = "projectModelId") Integer projectModelId,
                                    @AuthenticationPrincipal UserDetails userDetails) {
@@ -172,13 +173,38 @@ public class ProjectModelController {
                 .build();
     }
 
-    @GetMapping("/delModelId")
-    ResponseEntity<?> delModelId(){
+    @PostMapping("/delModelId")
+    ResponseEntity<?> delModelId(@RequestParam(name = "idList") List<Integer> idList,
+                                 @AuthenticationPrincipal UserDetails userDetails){
+        if(!projectModelService.delModelType(idList)){
+            return ResponseEntity
+                    .builder()
+                    .code(CustomResponseEnum.DEL_PROJECT_MODEL_ERROR.getCode())
+                    .message(CustomResponseEnum.DEL_PROJECT_MODEL_ERROR.getMessage())
+                    .data(false)
+                    .build();
+        }
         return ResponseEntity
                 .builder()
-                .code(CustomResponseEnum.GET_PROJECT_MODEL_OK.getCode())
-                .message(CustomResponseEnum.GET_PROJECT_MODEL_OK.getMessage())
-                .data(null)
+                .code(CustomResponseEnum.DEL_PROJECT_MODEL_OK.getCode())
+                .message(CustomResponseEnum.DEL_PROJECT_MODEL_OK.getMessage())
+                .data(true)
                 .build();
+    }
+
+    @GetMapping("/getModelByLimt")
+    ResponseEntity<?> getModelByLimt(
+            @RequestParam(name = "current") Integer current,
+            @RequestParam(name = "size") Integer size,
+            String modelName,
+            Integer projectModelTypeId,
+            @AuthenticationPrincipal UserDetails userDetails){
+        return ResponseEntity
+                .builder()
+                .code(CustomResponseEnum.GET_PROJECT_MODEL_LIMT_OK.getCode())
+                .message(CustomResponseEnum.GET_PROJECT_MODEL_LIMT_OK.getMessage())
+                .data(projectModelService.getModelByLimt(modelName,projectModelTypeId,size,current))
+                .build();
+
     }
 }

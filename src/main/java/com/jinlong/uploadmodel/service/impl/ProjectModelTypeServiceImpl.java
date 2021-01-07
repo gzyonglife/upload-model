@@ -2,6 +2,7 @@ package com.jinlong.uploadmodel.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.jinlong.uploadmodel.dao.ProjectModelTypeTableDao;
+import com.jinlong.uploadmodel.dao.ProjectZoneTableDao;
 import com.jinlong.uploadmodel.entity.data.ProjectModelTypeTable;
 import com.jinlong.uploadmodel.entity.vo.ProjectModelTypeVo;
 import com.jinlong.uploadmodel.service.ProjectModelTypeService;
@@ -11,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.List;
 
@@ -26,6 +28,8 @@ public class ProjectModelTypeServiceImpl implements ProjectModelTypeService {
 
     @Autowired
     ProjectModelTypeTableDao projectModelTypeDao;
+
+
 
     /**
      * 获取项目类型列表
@@ -55,4 +59,6 @@ public class ProjectModelTypeServiceImpl implements ProjectModelTypeService {
     public boolean isFolder(Integer typeId) {
         return projectModelTypeDao.selectById(typeId).getIsFolder();
     }
+
+
 }

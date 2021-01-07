@@ -90,7 +90,7 @@ public class ProjectPlanServiceImpl implements ProjectPlanService {
         projectPlanDao.insert(projectPlanTable);
         Integer projectPlanId = projectPlanTable.getProjectPlanId();
 
-        // 获取项目详情表id
+        // 获取项目详情表idgetPlanForProject
         ProjectTable projectTable = projectDao.selectById(projectId);
         Integer projectDetailsId = projectTable.getProjectDetailsId();
 
@@ -121,7 +121,11 @@ public class ProjectPlanServiceImpl implements ProjectPlanService {
             return null;
         }
         for(ProjectPlanTableVo list:planVo){
-            list.setProjectName(projectDao.selectById(list.getProjectId()).getProjectName());
+            if(projectDao.selectById(list.getProjectId())!=null){
+                list.setProjectName(projectDao.selectById(list.getProjectId()).getProjectName());
+            }else{
+                list.setProjectName("项目已被删除");
+            }
             planVos.add(list);
         }
         PageVo<ProjectPlanTableVo> pagevoplan = PageVo.createPageVoOfPage(tablePage, ProjectPlanTableVo.class);

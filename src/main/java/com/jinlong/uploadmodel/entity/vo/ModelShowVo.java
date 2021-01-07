@@ -3,6 +3,7 @@ package com.jinlong.uploadmodel.entity.vo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -31,7 +32,7 @@ public class ModelShowVo {
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date projectModelTime;
     /**
-     * 模型类型
+     * 模型类型名称
      */
     private String projectModelType;
     /**
@@ -51,4 +52,14 @@ public class ModelShowVo {
      * 访问根路径地址
      */
     private String pathZone;
+
+    /**
+     * 项目名称
+     */
+    private String projectName;
+
+    /**
+     * 模型类型
+     */
+    private Integer projectModelTypeId;
 }

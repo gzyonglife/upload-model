@@ -64,8 +64,9 @@ public enum CustomResponseEnum {
     GET_PROJECT_MODEL_OK(200, "获取项目模型成功"),
     GET_PROJECT_MODEL_NOT_EXIST(404, "获取项目模型为空"),
     GET_PROJECT_MODEL_FAILURE(500, "获取项目模型失败"),
-    DEL_PROJECT_MODEL_NOT_OK(200, "删除模型成功"),
+    DEL_PROJECT_MODEL_OK(200, "删除模型成功"),
     DEL_PROJECT_MODEL_ERROR(501, "删除模型失败"),
+    GET_PROJECT_MODEL_LIMT_OK(200, "模糊查询模型列表成功"),
 
     GET_STATISTICS_PROJECT_TYPE_OK(200,"获取项目类型统计"),
     GET_STATISTICS_PROJECT_TYPE_FAILURE(500,"获取项目类型统计失败"),

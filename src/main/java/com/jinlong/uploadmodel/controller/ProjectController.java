@@ -309,7 +309,11 @@ public class ProjectController {
             if(vo.getProjectCategoryId()==0 || vo.getProjectCategoryId()==null){
                 vo.setProjectClassTableName("分类已删除");
             }else{
-                vo.setProjectClassTableName(projectCategoryService.getProjectCategoryById(vo.getProjectCategoryId()).getProjectCategoryName());
+                if(projectCategoryService.getProjectCategoryById(vo.getProjectCategoryId())!=null){
+                    vo.setProjectClassTableName(projectCategoryService.getProjectCategoryById(vo.getProjectCategoryId()).getProjectCategoryName());
+                }else{
+                    vo.setProjectClassTableName("分类已删除");
+                }
             }
             if(vo.getProjectParent()!=null&&vo.getProjectParent()!=0){
                 if(projectService.getProjectById(vo.getProjectParent())!=null){
