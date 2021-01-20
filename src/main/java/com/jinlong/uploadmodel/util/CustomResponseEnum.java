@@ -15,6 +15,8 @@ public enum CustomResponseEnum {
     CREATE_PROJECT_PLAN_OK(200, "添加项目计划实施信息成功"),
     PROJECT_PLAN_EXIST(304, "该项目已存在计划实施信息,新建任务被禁止"),
     CREATE_PROJECT_PLAN_FAILURE(500, "添加项目计划实施信息失败"),
+    DEL_PROJECT_PLAN_OK(200, "删除模型成功"),
+    DEL_PROJECT_PLAN_ERROR(501, "删除模型失败"),
 
     GET_PROJECT_PLAN_OK(200, "获取项目计划实施信息成功"),
     GET_PROJECT_PLAN_FAILURE(500, "获取项目计划实施信息失败"),
@@ -60,16 +62,19 @@ public enum CustomResponseEnum {
     UPLOAD_PROJECT_MODEL_OK(200, "上传项目模型成功"),
     UPLOAD_PROJECT_MODEL_FAILURE(500, "上传项目模型失败"),
     UPDATE_PROJECT_MODEL_ERROR(400,"修改模型信息失败"),
-    UPDATE_PROJECT_MODEL_OK(400,"修改模型信息成功"),
+    UPDATE_PROJECT_MODEL_OK(200,"修改模型信息成功"),
     GET_PROJECT_MODEL_OK(200, "获取项目模型成功"),
     GET_PROJECT_MODEL_NOT_EXIST(404, "获取项目模型为空"),
     GET_PROJECT_MODEL_FAILURE(500, "获取项目模型失败"),
     DEL_PROJECT_MODEL_OK(200, "删除模型成功"),
     DEL_PROJECT_MODEL_ERROR(501, "删除模型失败"),
     GET_PROJECT_MODEL_LIMT_OK(200, "模糊查询模型列表成功"),
+    GET_PROJECT_MODEL_LIMT_NO(404, "模糊查询模型列表失败"),
 
     GET_STATISTICS_PROJECT_TYPE_OK(200,"获取项目类型统计"),
     GET_STATISTICS_PROJECT_TYPE_FAILURE(500,"获取项目类型统计失败"),
+
+    GET_STATISTICS_FIRM_LIMT_OK(200,"模糊查询单位信息成功！"),
 
     GET_PROJECT_BY_ID_OK(200,"获取项目详情信息成功"),
     GET_PROJECT_BY_ID_Null(500,"项目id缺少或者为0"),

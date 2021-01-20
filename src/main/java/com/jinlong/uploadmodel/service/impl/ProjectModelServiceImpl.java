@@ -236,6 +236,12 @@ public class ProjectModelServiceImpl implements ProjectModelService {
         }else{
             show.setProjectName("项目已被删除");
         }
+        show.setPort(projectZoneTableDao.selectById(1).getProjectZonePort());
+        if(projectModelTypeTableDao.selectById(show.getProjectModelTypeId())!=null){
+            show.setProjectModelType(projectModelTypeTableDao.selectById(show.getProjectModelTypeId()).getProjectModelType());
+        }else{
+            show.setProjectModelType("分类已被删除");
+        }
         return show;
     }
 

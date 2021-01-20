@@ -3,8 +3,10 @@ package com.jinlong.uploadmodel.entity.vo;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.jinlong.uploadmodel.entity.data.FirmTable;
 import lombok.Data;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 
 @Data
@@ -28,13 +30,13 @@ public class ProjectPlanTableVo {
     /**
      * 开工日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date projectPlanExpectStartTime;
 
     /**
      * 竣工日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date projectPlanExpectEndTime;
 
     /**
@@ -116,4 +118,48 @@ public class ProjectPlanTableVo {
      * 项目名称
      */
     private String projectName;
+
+    /**
+     * 项目备注
+     */
+    private String projectNote;
+
+    /**
+     * 项目年度编号
+     */
+    private String itemNumber;
+    /**
+     * 重点关注
+     */
+    private Integer isFocus;
+
+    /**
+     *  建设单位
+     */
+    private FirmTable constructionFirm;
+
+    /**
+     * 代建单位
+     */
+    private FirmTable agentConstructionFirm;
+
+    /**
+     * 配合单位
+     */
+    private FirmTable cooperateFirm;
+
+    /**
+     * 建设单位id
+     */
+    private Integer constructionFirmId;
+
+    /**
+     * 代建单位id
+     */
+    private Integer agentConstructionFirmId;
+
+    /**
+     * 配合单位id
+     */
+    private Integer cooperateFirmId;
 }

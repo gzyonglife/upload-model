@@ -1,5 +1,7 @@
 package com.jinlong.uploadmodel.entity.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.jinlong.uploadmodel.entity.data.FirmTable;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
@@ -27,17 +29,20 @@ public class ProjectPlanVo {
      * 计划年份
      */
 
+    @JsonFormat(pattern = "yyyy", timezone = "GMT+8")
     @NotNull(message = "projectPlanYear是必须的")
     private Date projectPlanYear;
 
     /**
      * 开工日期
      */
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date projectPlanExpectStartTime;
 
     /**
      * 竣工日期
      */
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date projectPlanExpectEndTime;
 
     /**
@@ -130,5 +135,20 @@ public class ProjectPlanVo {
      */
     @NotEmpty(message = "itemNumber是必须的")
     private String itemNumber;
+
+    /**
+     *  建设单位
+     */
+    private String constructionFirm;
+
+    /**
+     * 代建单位
+     */
+    private String agentConstructionFirm;
+
+    /**
+     * 配合单位
+     */
+    private String cooperateFirm;
 
 }

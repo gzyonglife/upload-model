@@ -20,7 +20,7 @@ public interface ProjectService {
      * @param pageVo
      * @return
      */
-    PageVo<ProjectVo> getProjectListOfPage(PageVo pageVo);
+    PageVo<ProjectVo> getProjectListOfPage(PageVo pageVo,Integer type);
 
     /**
      * 获取项目列表
@@ -29,7 +29,7 @@ public interface ProjectService {
      * @param userId
      * @return
      */
-    PageVo<ProjectVo> getProjectListOfPage(PageVo pageVo, Integer userId);
+    PageVo<ProjectVo> getProjectListOfPage(PageVo pageVo, Integer userId,Integer type);
 
     /**
      * 根据项目分类id查询项目

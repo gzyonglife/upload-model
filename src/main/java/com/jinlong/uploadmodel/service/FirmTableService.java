@@ -1,6 +1,8 @@
 package com.jinlong.uploadmodel.service;
 
 import com.jinlong.uploadmodel.entity.data.FirmTable;
+import com.jinlong.uploadmodel.entity.vo.PageVo;
+
 
 public interface FirmTableService {
 
@@ -11,4 +13,6 @@ public interface FirmTableService {
      * @return
      */
     FirmTable getFirmTableById(Integer firmId);
+
+    PageVo<FirmTable> getFirmTableByLimt(String firmName, Integer current, Integer size);
 }

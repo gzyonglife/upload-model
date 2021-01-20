@@ -11,4 +11,5 @@ import org.springframework.stereotype.Repository;
 @Mapper
 @Repository
 public interface ProjectPlanTableDao extends BaseMapper<ProjectPlanTable> {
+
 }

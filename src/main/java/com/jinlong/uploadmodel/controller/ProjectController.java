@@ -73,6 +73,7 @@ public class ProjectController {
     //@PreAuthorize("hasAnyAuthority('SUPERADMIN','ADMIN')")
     @GetMapping("/getProject/all")
     public ResponseEntity<?> getProjectListOfPage(
+            Integer type,
             @RequestParam(name = "current") @Validated @NotNull(message = "current不为空") Long current,
             @RequestParam(name = "size") @Validated @NotNull(message = "size不为空") Long size,
             @AuthenticationPrincipal UserDetails userDetails) {
@@ -82,14 +83,14 @@ public class ProjectController {
         pageVo.setSize(size);
         PageVo<ProjectVo> result;
         // 判断是否为超级管理员
-        if (userDetails.hasRole("SUPERADMIN")) {
-            // 查询所有项目
-            // 查询属于自己的项目
-            result = projectService.getProjectListOfPage(pageVo);
-        } else {
-            result = projectService.getProjectListOfPage(pageVo, userDetails.getId());
-        }
-
+//        if (userDetails.hasRole("SUPERADMIN")) {
+//            // 查询所有项目
+//            // 查询属于自己的项目
+//
+//        } else {
+//            result = projectService.getProjectListOfPage(pageVo, userDetails.getId());
+//        }
+        result = projectService.getProjectListOfPage(pageVo,type);
         if (result == null || result.getData().isEmpty()) {
             return ResponseEntity.createFromEnum(CustomResponseEnum.GET_PROJECT_LIST_FAILURE);
         }
@@ -104,7 +105,10 @@ public class ProjectController {
         for(ProjectVo vo : result.getData()){
             vo.setProjectClassTableName(projectCategoryService.getProjectCategoryById(vo.getProjectCategoryId()).getProjectCategoryName());
             if(vo.getProjectParent()!=null){
-                vo.setProjectParentName(projectService.getProjectById(vo.getProjectParent()).get().getProjectName());
+                if(projectService.getProjectById(vo.getProjectParent())!=null){
+                    vo.setProjectParentName(projectService.getProjectById(vo.getProjectParent()).get().getProjectName());
+                }
+
             }
 
             list.add(vo);
@@ -402,7 +406,6 @@ public class ProjectController {
                 ProjectVo projectVo = new ProjectVo();
                 projectVo.setUserId(1);
                 // 直接添加所有信息
-                //先将第二列手机号转换为string格式
                 row.getCell(1).setCellType(Cell.CELL_TYPE_STRING);
                 row.getCell(0).setCellType(Cell.CELL_TYPE_STRING);
                 // 4.读取每一行的单元格

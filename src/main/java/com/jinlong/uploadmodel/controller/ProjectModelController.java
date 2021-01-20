@@ -122,7 +122,7 @@ public class ProjectModelController {
                 .build();
     }
 
-    @PreAuthorize("hasAnyAuthority('SUPERADMIN','ADMIN')")
+    //@PreAuthorize("hasAnyAuthority('SUPERADMIN','ADMIN')")
     @ResponseBody
     @PutMapping("/modifyProjectModel/view")
     ResponseEntity<?> modifyProjectModelForView(
@@ -155,7 +155,7 @@ public class ProjectModelController {
                     .builder()
                     .code(CustomResponseEnum.UPDATE_PROJECT_MODEL_OK.getCode())
                     .message(CustomResponseEnum.UPDATE_PROJECT_MODEL_OK.getMessage())
-                    .data(null)
+                    .data(projectModelService.getModelById(projectModelId))
                     .build();
         }
         return ResponseEntity.createFromEnum(CustomResponseEnum.UPDATE_PROJECT_MODEL_ERROR);
@@ -199,11 +199,15 @@ public class ProjectModelController {
             String modelName,
             Integer projectModelTypeId,
             @AuthenticationPrincipal UserDetails userDetails){
+        PageVo<ModelShowVo> page = projectModelService.getModelByLimt(modelName,projectModelTypeId,size,current);
+        if(page.getData().isEmpty()||page.getData().size()==0){
+            return ResponseEntity.createFromEnum(CustomResponseEnum.GET_PROJECT_MODEL_LIMT_NO);
+        }
         return ResponseEntity
                 .builder()
                 .code(CustomResponseEnum.GET_PROJECT_MODEL_LIMT_OK.getCode())
                 .message(CustomResponseEnum.GET_PROJECT_MODEL_LIMT_OK.getMessage())
-                .data(projectModelService.getModelByLimt(modelName,projectModelTypeId,size,current))
+                .data(page)
                 .build();
 
     }

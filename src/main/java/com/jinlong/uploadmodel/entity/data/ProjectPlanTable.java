@@ -28,6 +28,7 @@ public class ProjectPlanTable implements Serializable {
      * 项目id
      */
     private Integer projectId;
+
     /**
      * 计划年份
      */
@@ -37,13 +38,13 @@ public class ProjectPlanTable implements Serializable {
     /**
      * 开工日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date projectPlanExpectStartTime;
 
     /**
      * 竣工日期
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date projectPlanExpectEndTime;
 
     /**
@@ -133,5 +134,20 @@ public class ProjectPlanTable implements Serializable {
     /**
      * 重点关注
      */
+    private Integer isFocus;
 
+    /**
+     * 建设单位id
+     */
+    private Integer constructionFirmId;
+
+    /**
+     * 代建单位id
+     */
+    private Integer agentConstructionFirmId;
+
+    /**
+     * 配合单位id
+     */
+    private Integer cooperateFirmId;
 }

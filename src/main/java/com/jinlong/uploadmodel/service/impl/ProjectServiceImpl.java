@@ -50,11 +50,20 @@ public class ProjectServiceImpl implements ProjectService {
      * @return
      */
     @Override
-    public PageVo<ProjectVo> getProjectListOfPage(PageVo pageVo) {
-        Page<ProjectTable> tablePage = projectDao.selectPage(
-                new Page<>(pageVo.getCurrent(), pageVo.getSize())
-                , new QueryWrapper<ProjectTable>().orderByDesc("create_time"));
-        return PageVo.createPageVoOfPage(tablePage, ProjectVo.class);
+    public PageVo<ProjectVo> getProjectListOfPage(PageVo pageVo,Integer type) {
+        if(type!=null&&type!=0){
+            if(type==1){
+                Page<ProjectTable> tablePage = new Page<>();
+                tablePage.setRecords(projectDao.selectList(new QueryWrapper<>()));
+                return PageVo.createPageVoOfPage(tablePage, ProjectVo.class);
+            }
+        }else{
+            Page<ProjectTable> tablePage = projectDao.selectPage(
+                    new Page<>(pageVo.getCurrent(), pageVo.getSize())
+                    , new QueryWrapper<ProjectTable>().orderByDesc("create_time"));
+            return PageVo.createPageVoOfPage(tablePage, ProjectVo.class);
+        }
+        return null;
     }
 
     /**
@@ -65,7 +74,7 @@ public class ProjectServiceImpl implements ProjectService {
      * @return
      */
     @Override
-    public PageVo<ProjectVo> getProjectListOfPage(PageVo pageVo, Integer userId) {
+    public PageVo<ProjectVo> getProjectListOfPage(PageVo pageVo, Integer userId,Integer type) {
         Page<ProjectTable> tablePage = projectDao.selectPage(
                 new Page<>(pageVo.getCurrent(), pageVo.getSize())
                 , new QueryWrapper<ProjectTable>().eq("user_id", userId).orderByDesc("create_time"));
