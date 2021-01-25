@@ -42,6 +42,7 @@ public enum CustomResponseEnum {
     DEL_PROJECT_LIST_NO(501,"删除失败"),
     UPDATE_PROJECT_OK(200,"修改项目信息成功"),
     UPDATE_PROJECT_FAILURE(200,"修改项目信息失败"),
+    UPDATE_PROJECT_IMG_VIDEO_OK(200,"上传成功！"),
 
     GET_PROJECT_MODEL_TYPE_OK(200, "获取项目类型列表成功"),
     GET_PROJECT_MODEL_TYPE_FAILURE(204, "未获取到项目类型列表"),
@@ -60,7 +61,7 @@ public enum CustomResponseEnum {
 
 
     UPLOAD_PROJECT_MODEL_OK(200, "上传项目模型成功"),
-    UPLOAD_PROJECT_MODEL_FAILURE(500, "上传项目模型失败"),
+    UPLOAD_PROJECT_MODEL_FAILURE(501, "上传项目模型失败"),
     UPDATE_PROJECT_MODEL_ERROR(400,"修改模型信息失败"),
     UPDATE_PROJECT_MODEL_OK(200,"修改模型信息成功"),
     GET_PROJECT_MODEL_OK(200, "获取项目模型成功"),
@@ -72,12 +73,18 @@ public enum CustomResponseEnum {
     GET_PROJECT_MODEL_LIMT_NO(404, "模糊查询模型列表失败"),
 
     GET_STATISTICS_PROJECT_TYPE_OK(200,"获取项目类型统计"),
-    GET_STATISTICS_PROJECT_TYPE_FAILURE(500,"获取项目类型统计失败"),
+    GET_STATISTICS_PROJECT_TYPE_FAILURE(501,"获取项目类型统计失败"),
 
     GET_STATISTICS_FIRM_LIMT_OK(200,"模糊查询单位信息成功！"),
+    GET_STATISTICS_FIRM_UPDATE_OK(200,"修改单位信息成功！"),
+    GET_STATISTICS_FIRM_UPDATE_NO(501,"修改单位信息失败！"),
+    GET_STATISTICS_FIRM_ADD_OK(200,"添加单位信息成功！"),
+    GET_STATISTICS_FIRM_ADD_NO(501,"添加单位信息失败！"),
+    GET_STATISTICS_FIRM_DEL_OK(200,"删除单位信息成功！"),
+    GET_STATISTICS_FIRM_DEL_NO(501,"删除单位信息失败！"),
 
     GET_PROJECT_BY_ID_OK(200,"获取项目详情信息成功"),
-    GET_PROJECT_BY_ID_Null(500,"项目id缺少或者为0"),
+    GET_PROJECT_BY_ID_Null(501,"项目id缺少或者为0"),
     GET_PROJECT_BY_ID_FAILURE(404,"获取项目详情信息失败");
 
 

@@ -3,6 +3,7 @@ package com.jinlong.uploadmodel.service;
 import com.jinlong.uploadmodel.entity.data.ProjectTable;
 import com.jinlong.uploadmodel.entity.vo.PageVo;
 import com.jinlong.uploadmodel.entity.vo.ProjectVo;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -124,4 +125,7 @@ public interface ProjectService {
      */
     ProjectVo updateProject(ProjectVo projectVo);
 
+    Boolean addImgVideo(MultipartFile[] imgFolder,
+                        MultipartFile[] videoFolder,
+                        Integer projectId);
 }

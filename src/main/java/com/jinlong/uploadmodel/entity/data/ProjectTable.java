@@ -67,4 +67,8 @@ public class ProjectTable implements Serializable {
      */
     private String imgUrl;
 
+    /**
+     * 视频地址
+     */
+    private String videoUrl;
 }

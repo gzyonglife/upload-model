@@ -18,8 +18,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -270,6 +272,66 @@ public class ProjectServiceImpl implements ProjectService {
             return projectVo;
         }
         return null;
+    }
+
+    @Override
+    public Boolean addImgVideo(MultipartFile[] imgFolder, MultipartFile[] videoFolder, Integer projectId) {
+        ProjectTable projectTable = projectDao.selectById(projectId);
+        // 断言数据库取出的对应项目数据不为空
+        Assert.assertNotNull(projectTable, CustomExceptionEnum.SERVER_ERROR);
+        String path = projectZoneSelector.getProjectZonePathById(projectTable.getProjectZoneId()) + "/" + projectTable.getProjectName();
+        Set<String> set = new HashSet<>();
+        //path += "/" + imgFolder.;
+        if(imgFolder!=null){
+            for (MultipartFile field : imgFolder) {
+                String originalFilename = path;
+                originalFilename+="/"+field.getOriginalFilename().substring(field.getOriginalFilename().indexOf("/")+1);
+                projectTable.setImgUrl(originalFilename);
+                projectDao.updateById(projectTable);
+                String folderPath = originalFilename.substring(0, originalFilename.lastIndexOf("/"));
+                File folderFile = null;
+                if (set.add(folderPath)) {
+                    folderFile = new File(folderPath);
+                    if (!folderFile.exists()) {
+                        folderFile.mkdirs();
+                    }
+                }
+                File file = new File(originalFilename);
+                try {
+                    field.transferTo(new File(originalFilename));
+                } catch (IOException e) {
+                    log.error("保存文件出错，异常信息为：{}", e.getMessage());
+                    throw CustomExceptionEnum.SERVER_ERROR.getException();
+                }
+
+            }
+        }
+        if(videoFolder!=null){
+            for (MultipartFile field : videoFolder) {
+                String originalFilename = path;
+                originalFilename+="/"+field.getOriginalFilename().substring(field.getOriginalFilename().indexOf("/")+1);
+                projectTable.setVideoUrl(originalFilename);
+                projectDao.updateById(projectTable);
+                String folderPath = originalFilename.substring(0, originalFilename.lastIndexOf("/"));
+                File folderFile = null;
+                if (set.add(folderPath)) {
+                    folderFile = new File(folderPath);
+                    if (!folderFile.exists()) {
+                        folderFile.mkdirs();
+                    }
+                }
+                File file = new File(originalFilename);
+                try {
+                    field.transferTo(new File(originalFilename));
+                } catch (IOException e) {
+                    log.error("保存文件出错，异常信息为：{}", e.getMessage());
+                    throw CustomExceptionEnum.SERVER_ERROR.getException();
+                }
+
+            }
+        }
+
+        return true;
     }
 
     @Override

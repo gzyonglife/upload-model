@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Slf4j
 @Service
 public class FirmTableServiceImpl implements FirmTableService {
@@ -34,5 +36,20 @@ public class FirmTableServiceImpl implements FirmTableService {
         PageVo<FirmTable> pageVo = BeanBeanHelpUtils.copyProperties(page, PageVo.class);
         pageVo.setData(page.getRecords());
         return pageVo;
+    }
+
+    @Override
+    public Boolean updateFirmTable(FirmTable firmTable) {
+        return firmTableDao.updateById(firmTable)==1?true:false;
+    }
+
+    @Override
+    public Boolean addFirmTable(FirmTable firmTable) {
+        return firmTableDao.insert(firmTable)==1?true:false;
+    }
+
+    @Override
+    public Boolean delFirmTable(List list) {
+        return firmTableDao.deleteBatchIds(list)>=1;
     }
 }

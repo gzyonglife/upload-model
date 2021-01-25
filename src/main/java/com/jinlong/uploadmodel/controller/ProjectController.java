@@ -409,13 +409,9 @@ public class ProjectController {
                 row.getCell(1).setCellType(Cell.CELL_TYPE_STRING);
                 row.getCell(0).setCellType(Cell.CELL_TYPE_STRING);
                 // 4.读取每一行的单元格
-                String stringCellValue="";
-                String stringCellValue2="";
                 if(row.getCell(0)!=null && row.getCell(1)!=null)
                     projectVo.setProjectName(row.getCell(0).getStringCellValue());
                     projectVo.setProjectCategoryId(projectCategoryService.getProjectCategoryByadd(row.getCell(1).getStringCellValue()));
-                    stringCellValue = row.getCell(0).getStringCellValue(); // 第一列数据
-                    stringCellValue2 = row.getCell(1).getStringCellValue();// 第二列
                     projectVo.setProjectParent(
                         projectService.searchProjectForPage(0,row.getCell(3).getStringCellValue(),"",1,1).getData().get(0).getProjectId()
                     );
@@ -430,6 +426,21 @@ public class ProjectController {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+
+    }
+
+
+    @PostMapping("/addUrlImgVideo")
+    public ResponseEntity<?> addImgVideo(MultipartFile[] imgFolder,
+                                         MultipartFile[] videoFolder,
+                                         @RequestParam("projectId") Integer projectId,
+                                         @AuthenticationPrincipal UserDetails userDetails){
+        return ResponseEntity
+                .builder()
+                .code(CustomResponseEnum.UPDATE_PROJECT_IMG_VIDEO_OK.getCode())
+                .message(CustomResponseEnum.UPDATE_PROJECT_IMG_VIDEO_OK.getMessage())
+                .data(projectService.addImgVideo(imgFolder,videoFolder,projectId))
+                .build();
 
     }
 
