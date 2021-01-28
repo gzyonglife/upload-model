@@ -60,7 +60,7 @@ public class ProjectTable implements Serializable {
     /**
      * 项目位置经纬度
      */
-    private String LongitudeAndLatitude;
+    private String longitudeAndLatitude;
 
     /**
      * 缩略图地址

@@ -82,5 +82,5 @@ public class ProjectsVo {
     /**
      * 项目位置经纬度
      */
-    private String LongitudeAndLatitude;
+    private String longitudeAndLatitude;
 }

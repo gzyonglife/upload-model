@@ -64,9 +64,14 @@ public class ProjectVo {
     /**
      * 项目位置经纬度
      */
-    private String LongitudeAndLatitude;
+    private String longitudeAndLatitude;
     /**
      * 缩略图地址
      */
     private String imgUrl;
+
+    /**
+     * 视频地址
+     */
+    private String videoUrl;
 }

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jinlong.uploadmodel.dao.ProjectImplementationDao">
+  <resultMap id="BaseResultMap" type="com.jinlong.uploadmodel.entity.data.ProjectImplementation">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="project_id" jdbcType="INTEGER" property="projectId" />
+    <result column="implementation_data" jdbcType="DATE" property="implementationData" />
+    <result column="implementation_text" jdbcType="VARCHAR" property="implementationText" />
+    <result column="implementation_money" jdbcType="DOUBLE" property="implementationMoney" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, project_id, implementation_data, implementation_text, implementation_money
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from project_implementation
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from project_implementation
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.jinlong.uploadmodel.entity.data.ProjectImplementation" useGeneratedKeys="true">
+    insert into project_implementation (project_id, implementation_data, implementation_text, 
+      implementation_money)
+    values (#{projectId,jdbcType=INTEGER}, #{implementationData,jdbcType=DATE}, #{implementationText,jdbcType=VARCHAR}, 
+      #{implementationMoney,jdbcType=DOUBLE})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.jinlong.uploadmodel.entity.data.ProjectImplementation" useGeneratedKeys="true">
+    insert into project_implementation
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="projectId != null">
+        project_id,
+      </if>
+      <if test="implementationData != null">
+        implementation_data,
+      </if>
+      <if test="implementationText != null">
+        implementation_text,
+      </if>
+      <if test="implementationMoney != null">
+        implementation_money,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="projectId != null">
+        #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="implementationData != null">
+        #{implementationData,jdbcType=DATE},
+      </if>
+      <if test="implementationText != null">
+        #{implementationText,jdbcType=VARCHAR},
+      </if>
+      <if test="implementationMoney != null">
+        #{implementationMoney,jdbcType=DOUBLE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jinlong.uploadmodel.entity.data.ProjectImplementation">
+    update project_implementation
+    <set>
+      <if test="projectId != null">
+        project_id = #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="implementationData != null">
+        implementation_data = #{implementationData,jdbcType=DATE},
+      </if>
+      <if test="implementationText != null">
+        implementation_text = #{implementationText,jdbcType=VARCHAR},
+      </if>
+      <if test="implementationMoney != null">
+        implementation_money = #{implementationMoney,jdbcType=DOUBLE},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jinlong.uploadmodel.entity.data.ProjectImplementation">
+    update project_implementation
+    set project_id = #{projectId,jdbcType=INTEGER},
+      implementation_data = #{implementationData,jdbcType=DATE},
+      implementation_text = #{implementationText,jdbcType=VARCHAR},
+      implementation_money = #{implementationMoney,jdbcType=DOUBLE}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

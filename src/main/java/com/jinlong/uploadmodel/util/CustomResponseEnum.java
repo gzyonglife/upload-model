@@ -83,6 +83,12 @@ public enum CustomResponseEnum {
     GET_STATISTICS_FIRM_DEL_OK(200,"删除单位信息成功！"),
     GET_STATISTICS_FIRM_DEL_NO(501,"删除单位信息失败！"),
 
+    GET_PROJECT_IMPLEMENTATION_OK(200,"获取实施信息成功！"),
+    ADD_PROJECT_IMPLEMENTATION_OK(200,"添加实施信息成功！"),
+    ADD_PROJECT_IMPLEMENTATION_NO(501,"添加实施信息失败！"),
+    UPDATE_PROJECT_IMPLEMENTATION_OK(200,"修改实施信息成功！"),
+    UPDATE_PROJECT_IMPLEMENTATION_NO(501,"修改实施信息失败！"),
+
     GET_PROJECT_BY_ID_OK(200,"获取项目详情信息成功"),
     GET_PROJECT_BY_ID_Null(501,"项目id缺少或者为0"),
     GET_PROJECT_BY_ID_FAILURE(404,"获取项目详情信息失败");
