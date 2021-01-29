@@ -89,6 +89,18 @@ public enum CustomResponseEnum {
     UPDATE_PROJECT_IMPLEMENTATION_OK(200,"修改实施信息成功！"),
     UPDATE_PROJECT_IMPLEMENTATION_NO(501,"修改实施信息失败！"),
 
+    GET_PROJECTAPPROVAL_LIKE_OK(200,"查询项目审批进度成功！"),
+    UPDATE_PROJECTAPPROVAL_OK(200,"修改项目审批进度成功！"),
+    UPDATE_PROJECTAPPROVAL_NO(501,"修改项目审批进度失败！"),
+
+    GET_PROJECTBECOMPLETED_LIKE_OK(200,"查询项目竣工信息成功！"),
+    UPDATE_PROJECTBECOMPLETED_OK(200,"修改项目竣工信息成功！"),
+    UPDATE_PROJECTBECOMPLETED_NO(501,"修改项目竣工信息失败！"),
+
+    GET_PROJECTPUBLICITY_LIKE_OK(200,"查询项目公示信息成功！"),
+    UPDATE_PROJECTPUBLICITY_OK(200,"修改项目公示信息成功！"),
+    UPDATE_PROJECTPUBLICITY_NO(501,"修改项目公示信息失败！"),
+
     GET_PROJECT_BY_ID_OK(200,"获取项目详情信息成功"),
     GET_PROJECT_BY_ID_Null(501,"项目id缺少或者为0"),
     GET_PROJECT_BY_ID_FAILURE(404,"获取项目详情信息失败");

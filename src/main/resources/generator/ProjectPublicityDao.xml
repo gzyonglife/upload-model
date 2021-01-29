@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jinlong.uploadmodel.dao.ProjectPublicityDao">
+  <resultMap id="BaseResultMap" type="com.jinlong.uploadmodel.entity.data.ProjectPublicity">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="project" jdbcType="INTEGER" property="project" />
+    <result column="land_requisition_notice" jdbcType="INTEGER" property="landRequisitionNotice" />
+    <result column="land_acquisition_approval" jdbcType="INTEGER" property="landAcquisitionApproval" />
+    <result column="four_plans" jdbcType="INTEGER" property="fourPlans" />
+    <result column="survey" jdbcType="INTEGER" property="survey" />
+    <result column="design" jdbcType="INTEGER" property="design" />
+    <result column="construction" jdbcType="INTEGER" property="construction" />
+    <result column="supervisor" jdbcType="INTEGER" property="supervisor" />
+    <result column="protective_measures" jdbcType="INTEGER" property="protectiveMeasures" />
+    <result column="quality_safety" jdbcType="INTEGER" property="qualitySafety" />
+    <result column="winning_the_bid" jdbcType="INTEGER" property="winningTheBid" />
+    <result column="result_the_bid" jdbcType="INTEGER" property="resultTheBid" />
+    <result column="contract_information" jdbcType="INTEGER" property="contractInformation" />
+    <result column="bidding" jdbcType="INTEGER" property="bidding" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, project, land_requisition_notice, land_acquisition_approval, four_plans, survey, 
+    design, construction, supervisor, protective_measures, quality_safety, winning_the_bid, 
+    result_the_bid, contract_information, bidding
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from project_publicity
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from project_publicity
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.jinlong.uploadmodel.entity.data.ProjectPublicity" useGeneratedKeys="true">
+    insert into project_publicity (project, land_requisition_notice, land_acquisition_approval, 
+      four_plans, survey, design, 
+      construction, supervisor, protective_measures, 
+      quality_safety, winning_the_bid, result_the_bid, 
+      contract_information, bidding)
+    values (#{project,jdbcType=INTEGER}, #{landRequisitionNotice,jdbcType=INTEGER}, #{landAcquisitionApproval,jdbcType=INTEGER}, 
+      #{fourPlans,jdbcType=INTEGER}, #{survey,jdbcType=INTEGER}, #{design,jdbcType=INTEGER}, 
+      #{construction,jdbcType=INTEGER}, #{supervisor,jdbcType=INTEGER}, #{protectiveMeasures,jdbcType=INTEGER}, 
+      #{qualitySafety,jdbcType=INTEGER}, #{winningTheBid,jdbcType=INTEGER}, #{resultTheBid,jdbcType=INTEGER}, 
+      #{contractInformation,jdbcType=INTEGER}, #{bidding,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.jinlong.uploadmodel.entity.data.ProjectPublicity" useGeneratedKeys="true">
+    insert into project_publicity
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="project != null">
+        project,
+      </if>
+      <if test="landRequisitionNotice != null">
+        land_requisition_notice,
+      </if>
+      <if test="landAcquisitionApproval != null">
+        land_acquisition_approval,
+      </if>
+      <if test="fourPlans != null">
+        four_plans,
+      </if>
+      <if test="survey != null">
+        survey,
+      </if>
+      <if test="design != null">
+        design,
+      </if>
+      <if test="construction != null">
+        construction,
+      </if>
+      <if test="supervisor != null">
+        supervisor,
+      </if>
+      <if test="protectiveMeasures != null">
+        protective_measures,
+      </if>
+      <if test="qualitySafety != null">
+        quality_safety,
+      </if>
+      <if test="winningTheBid != null">
+        winning_the_bid,
+      </if>
+      <if test="resultTheBid != null">
+        result_the_bid,
+      </if>
+      <if test="contractInformation != null">
+        contract_information,
+      </if>
+      <if test="bidding != null">
+        bidding,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="project != null">
+        #{project,jdbcType=INTEGER},
+      </if>
+      <if test="landRequisitionNotice != null">
+        #{landRequisitionNotice,jdbcType=INTEGER},
+      </if>
+      <if test="landAcquisitionApproval != null">
+        #{landAcquisitionApproval,jdbcType=INTEGER},
+      </if>
+      <if test="fourPlans != null">
+        #{fourPlans,jdbcType=INTEGER},
+      </if>
+      <if test="survey != null">
+        #{survey,jdbcType=INTEGER},
+      </if>
+      <if test="design != null">
+        #{design,jdbcType=INTEGER},
+      </if>
+      <if test="construction != null">
+        #{construction,jdbcType=INTEGER},
+      </if>
+      <if test="supervisor != null">
+        #{supervisor,jdbcType=INTEGER},
+      </if>
+      <if test="protectiveMeasures != null">
+        #{protectiveMeasures,jdbcType=INTEGER},
+      </if>
+      <if test="qualitySafety != null">
+        #{qualitySafety,jdbcType=INTEGER},
+      </if>
+      <if test="winningTheBid != null">
+        #{winningTheBid,jdbcType=INTEGER},
+      </if>
+      <if test="resultTheBid != null">
+        #{resultTheBid,jdbcType=INTEGER},
+      </if>
+      <if test="contractInformation != null">
+        #{contractInformation,jdbcType=INTEGER},
+      </if>
+      <if test="bidding != null">
+        #{bidding,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jinlong.uploadmodel.entity.data.ProjectPublicity">
+    update project_publicity
+    <set>
+      <if test="project != null">
+        project = #{project,jdbcType=INTEGER},
+      </if>
+      <if test="landRequisitionNotice != null">
+        land_requisition_notice = #{landRequisitionNotice,jdbcType=INTEGER},
+      </if>
+      <if test="landAcquisitionApproval != null">
+        land_acquisition_approval = #{landAcquisitionApproval,jdbcType=INTEGER},
+      </if>
+      <if test="fourPlans != null">
+        four_plans = #{fourPlans,jdbcType=INTEGER},
+      </if>
+      <if test="survey != null">
+        survey = #{survey,jdbcType=INTEGER},
+      </if>
+      <if test="design != null">
+        design = #{design,jdbcType=INTEGER},
+      </if>
+      <if test="construction != null">
+        construction = #{construction,jdbcType=INTEGER},
+      </if>
+      <if test="supervisor != null">
+        supervisor = #{supervisor,jdbcType=INTEGER},
+      </if>
+      <if test="protectiveMeasures != null">
+        protective_measures = #{protectiveMeasures,jdbcType=INTEGER},
+      </if>
+      <if test="qualitySafety != null">
+        quality_safety = #{qualitySafety,jdbcType=INTEGER},
+      </if>
+      <if test="winningTheBid != null">
+        winning_the_bid = #{winningTheBid,jdbcType=INTEGER},
+      </if>
+      <if test="resultTheBid != null">
+        result_the_bid = #{resultTheBid,jdbcType=INTEGER},
+      </if>
+      <if test="contractInformation != null">
+        contract_information = #{contractInformation,jdbcType=INTEGER},
+      </if>
+      <if test="bidding != null">
+        bidding = #{bidding,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jinlong.uploadmodel.entity.data.ProjectPublicity">
+    update project_publicity
+    set project = #{project,jdbcType=INTEGER},
+      land_requisition_notice = #{landRequisitionNotice,jdbcType=INTEGER},
+      land_acquisition_approval = #{landAcquisitionApproval,jdbcType=INTEGER},
+      four_plans = #{fourPlans,jdbcType=INTEGER},
+      survey = #{survey,jdbcType=INTEGER},
+      design = #{design,jdbcType=INTEGER},
+      construction = #{construction,jdbcType=INTEGER},
+      supervisor = #{supervisor,jdbcType=INTEGER},
+      protective_measures = #{protectiveMeasures,jdbcType=INTEGER},
+      quality_safety = #{qualitySafety,jdbcType=INTEGER},
+      winning_the_bid = #{winningTheBid,jdbcType=INTEGER},
+      result_the_bid = #{resultTheBid,jdbcType=INTEGER},
+      contract_information = #{contractInformation,jdbcType=INTEGER},
+      bidding = #{bidding,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

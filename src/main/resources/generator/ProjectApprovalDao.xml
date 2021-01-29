@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jinlong.uploadmodel.dao.ProjectApprovalDao">
+  <resultMap id="BaseResultMap" type="com.jinlong.uploadmodel.entity.data.ProjectApproval">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="project_id" jdbcType="INTEGER" property="projectId" />
+    <result column="build" jdbcType="INTEGER" property="build" />
+    <result column="construction" jdbcType="INTEGER" property="construction" />
+    <result column="contract" jdbcType="INTEGER" property="contract" />
+    <result column="water_intake" jdbcType="INTEGER" property="waterIntake" />
+    <result column="soil_and_water" jdbcType="INTEGER" property="soilAndWater" />
+    <result column="flood" jdbcType="INTEGER" property="flood" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, project_id, build, construction, contract, water_intake, soil_and_water, flood
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from project_approval
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from project_approval
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.jinlong.uploadmodel.entity.data.ProjectApproval" useGeneratedKeys="true">
+    insert into project_approval (project_id, build, construction, 
+      contract, water_intake, soil_and_water, 
+      flood)
+    values (#{projectId,jdbcType=INTEGER}, #{build,jdbcType=INTEGER}, #{construction,jdbcType=INTEGER}, 
+      #{contract,jdbcType=INTEGER}, #{waterIntake,jdbcType=INTEGER}, #{soilAndWater,jdbcType=INTEGER}, 
+      #{flood,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.jinlong.uploadmodel.entity.data.ProjectApproval" useGeneratedKeys="true">
+    insert into project_approval
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="projectId != null">
+        project_id,
+      </if>
+      <if test="build != null">
+        build,
+      </if>
+      <if test="construction != null">
+        construction,
+      </if>
+      <if test="contract != null">
+        contract,
+      </if>
+      <if test="waterIntake != null">
+        water_intake,
+      </if>
+      <if test="soilAndWater != null">
+        soil_and_water,
+      </if>
+      <if test="flood != null">
+        flood,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="projectId != null">
+        #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="build != null">
+        #{build,jdbcType=INTEGER},
+      </if>
+      <if test="construction != null">
+        #{construction,jdbcType=INTEGER},
+      </if>
+      <if test="contract != null">
+        #{contract,jdbcType=INTEGER},
+      </if>
+      <if test="waterIntake != null">
+        #{waterIntake,jdbcType=INTEGER},
+      </if>
+      <if test="soilAndWater != null">
+        #{soilAndWater,jdbcType=INTEGER},
+      </if>
+      <if test="flood != null">
+        #{flood,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.jinlong.uploadmodel.entity.data.ProjectApproval">
+    update project_approval
+    <set>
+      <if test="projectId != null">
+        project_id = #{projectId,jdbcType=INTEGER},
+      </if>
+      <if test="build != null">
+        build = #{build,jdbcType=INTEGER},
+      </if>
+      <if test="construction != null">
+        construction = #{construction,jdbcType=INTEGER},
+      </if>
+      <if test="contract != null">
+        contract = #{contract,jdbcType=INTEGER},
+      </if>
+      <if test="waterIntake != null">
+        water_intake = #{waterIntake,jdbcType=INTEGER},
+      </if>
+      <if test="soilAndWater != null">
+        soil_and_water = #{soilAndWater,jdbcType=INTEGER},
+      </if>
+      <if test="flood != null">
+        flood = #{flood,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.jinlong.uploadmodel.entity.data.ProjectApproval">
+    update project_approval
+    set project_id = #{projectId,jdbcType=INTEGER},
+      build = #{build,jdbcType=INTEGER},
+      construction = #{construction,jdbcType=INTEGER},
+      contract = #{contract,jdbcType=INTEGER},
+      water_intake = #{waterIntake,jdbcType=INTEGER},
+      soil_and_water = #{soilAndWater,jdbcType=INTEGER},
+      flood = #{flood,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

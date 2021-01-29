@@ -1,17 +1,17 @@
 package com.jinlong.uploadmodel.controller;
 
 import com.jinlong.uploadmodel.entity.access.UserDetails;
-import com.jinlong.uploadmodel.entity.data.ProjectDetailsTable;
-import com.jinlong.uploadmodel.entity.data.ProjectPlanTable;
-import com.jinlong.uploadmodel.entity.data.ProjectTable;
+import com.jinlong.uploadmodel.entity.data.*;
 import com.jinlong.uploadmodel.entity.vo.PageVo;
 import com.jinlong.uploadmodel.entity.vo.ProjectVo;
 import com.jinlong.uploadmodel.entity.vo.ProjectsVo;
 import com.jinlong.uploadmodel.entity.vo.ResponseEntity;
 import com.jinlong.uploadmodel.service.*;
 import com.jinlong.uploadmodel.util.Assert;
+import com.jinlong.uploadmodel.util.BeanBeanHelpUtils;
 import com.jinlong.uploadmodel.util.CustomExceptionEnum;
 import com.jinlong.uploadmodel.util.CustomResponseEnum;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
@@ -39,6 +39,7 @@ import java.util.Optional;
  * @author: jinlong
  * @time: 2020/6/3 11:48
  */
+@Slf4j
 @RestController
 @RequestMapping("project")
 public class ProjectController {
@@ -61,6 +62,14 @@ public class ProjectController {
     @Autowired
     ProjectClassTableService projectClassTableService;
 
+    @Autowired
+    ProjectApprovalService projectApprovalService;
+
+    @Autowired
+    ProjectBeCompletedService projectBeCompletedService;
+
+    @Autowired
+    ProjectPublicityService projectPublicityService;
 
     /**
      * 获取项目列表
@@ -147,6 +156,21 @@ public class ProjectController {
         result = projectService.addProject(projectVo);
         if (result == null) {
             return ResponseEntity.createFromEnum(CustomResponseEnum.CREATE_PROJECT_FAILURE);
+        }else{
+            PageVo<ProjectVo> page = projectService.searchProjectForPage(null,result.getProjectName(),null,1,1);
+            if(!page.getData().isEmpty()){
+                int projectId = page.getData().get(0).getProjectId();
+                if(!projectApprovalService.addProjectApproval(ProjectApproval.builder().projectId(projectId).build())){
+                    log.info("添加项目审批信息失败");
+                }
+                if(!projectBeCompletedService.addProjectBeCompleted(ProjectBeCompleted.builder().projectId(projectId).build())){
+                    log.info("添加项目竣工信息失败");
+                }
+                if(!projectPublicityService.addProjectPublicity(ProjectPublicity.builder().projectId(projectId).build())){
+                    log.info("添加项目公示信息失败");
+                }
+            }
+
         }
         return ResponseEntity
                 .builder()
@@ -415,11 +439,6 @@ public class ProjectController {
                     projectVo.setProjectParent(
                         projectService.searchProjectForPage(0,row.getCell(3).getStringCellValue(),"",1,1).getData().get(0).getProjectId()
                     );
-
-                // 写多少个具体看大家上传的文件有多少列.....
-                // 测试是否读取到数据,及数据的正确性
-//                System.out.println(stringCellValue);
-//                System.out.println(stringCellValue2);
                 projectService.addProject(projectVo);
             }
         } catch (Exception e) {
@@ -441,7 +460,5 @@ public class ProjectController {
                 .message(CustomResponseEnum.UPDATE_PROJECT_IMG_VIDEO_OK.getMessage())
                 .data(projectService.addImgVideo(imgFolder,videoFolder,projectId))
                 .build();
-
     }
-
 }
