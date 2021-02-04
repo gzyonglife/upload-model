@@ -5,6 +5,7 @@ import com.jinlong.uploadmodel.entity.vo.ResponseEntity;
 import com.jinlong.uploadmodel.service.ProjectApprovalService;
 import com.jinlong.uploadmodel.util.CustomResponseEnum;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -33,7 +34,7 @@ public class ProjectApprovalController {
     }
 
     @PostMapping("updateProjectApproval")
-    public ResponseEntity<?> updateProjectApproval(ProjectApproval projectApproval){
+    public ResponseEntity<?> updateProjectApproval(@RequestBody @Validated ProjectApproval projectApproval){
         if(!projectApprovalService.updateProjectApproval(projectApproval)){
             return ResponseEntity.createFromEnum(CustomResponseEnum.UPDATE_PROJECTAPPROVAL_NO);
         }

@@ -8,7 +8,6 @@ import com.jinlong.uploadmodel.entity.vo.ProjectsVo;
 import com.jinlong.uploadmodel.entity.vo.ResponseEntity;
 import com.jinlong.uploadmodel.service.*;
 import com.jinlong.uploadmodel.util.Assert;
-import com.jinlong.uploadmodel.util.BeanBeanHelpUtils;
 import com.jinlong.uploadmodel.util.CustomExceptionEnum;
 import com.jinlong.uploadmodel.util.CustomResponseEnum;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +17,6 @@ import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -86,7 +84,6 @@ public class ProjectController {
             @RequestParam(name = "current") @Validated @NotNull(message = "current不为空") Long current,
             @RequestParam(name = "size") @Validated @NotNull(message = "size不为空") Long size,
             @AuthenticationPrincipal UserDetails userDetails) {
-
         PageVo<Object> pageVo = new PageVo<>();
         pageVo.setCurrent(current);
         pageVo.setSize(size);
@@ -117,7 +114,6 @@ public class ProjectController {
                 if(projectService.getProjectById(vo.getProjectParent())!=null){
                     vo.setProjectParentName(projectService.getProjectById(vo.getProjectParent()).get().getProjectName());
                 }
-
             }
 
             list.add(vo);

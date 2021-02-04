@@ -1,11 +1,11 @@
 package com.jinlong.uploadmodel.controller;
 
-import com.jinlong.uploadmodel.entity.data.ProjectApproval;
 import com.jinlong.uploadmodel.entity.data.ProjectBeCompleted;
 import com.jinlong.uploadmodel.entity.vo.ResponseEntity;
 import com.jinlong.uploadmodel.service.ProjectBeCompletedService;
 import com.jinlong.uploadmodel.util.CustomResponseEnum;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -34,7 +34,7 @@ public class ProjectBeCompletedController {
     }
 
     @PostMapping("updateProjectBeCompleted")
-    public ResponseEntity<?> updateProjectBeCompleted(ProjectBeCompleted projectBeCompleted){
+    public ResponseEntity<?> updateProjectBeCompleted(@RequestBody @Validated ProjectBeCompleted projectBeCompleted){
         if(!projectBeCompletedService.updateProjectBeCompleted(projectBeCompleted)){
             return ResponseEntity.createFromEnum(CustomResponseEnum.UPDATE_PROJECTBECOMPLETED_NO);
         }

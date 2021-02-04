@@ -10,9 +10,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * project_approval
- * @author 
+ * @author
  */
 @Builder
 @NoArgsConstructor
@@ -24,11 +26,13 @@ public class ProjectApproval implements Serializable {
      * 审批id
      */
     @TableId(type = IdType.AUTO)
+    @NotNull(message = "id不能为空")
     private Integer id;
 
     /**
      * 项目id
      */
+    @NotNull(message = "项目id不能为空")
     private Integer projectId;
 
     /**

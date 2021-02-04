@@ -1,7 +1,6 @@
 package com.jinlong.uploadmodel.controller;
 
 import com.jinlong.uploadmodel.entity.access.UserDetails;
-import com.jinlong.uploadmodel.entity.data.ProjectModelTable;
 import com.jinlong.uploadmodel.entity.vo.ModelShowVo;
 import com.jinlong.uploadmodel.entity.vo.PageVo;
 import com.jinlong.uploadmodel.entity.vo.ProjectModelVo;

@@ -5,7 +5,6 @@ import com.jinlong.uploadmodel.entity.vo.ResponseEntity;
 import com.jinlong.uploadmodel.service.ProjectModelTypeService;
 import com.jinlong.uploadmodel.util.CustomResponseEnum;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

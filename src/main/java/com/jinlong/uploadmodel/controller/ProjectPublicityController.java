@@ -5,6 +5,7 @@ import com.jinlong.uploadmodel.entity.vo.ResponseEntity;
 import com.jinlong.uploadmodel.service.ProjectPublicityService;
 import com.jinlong.uploadmodel.util.CustomResponseEnum;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -33,7 +34,7 @@ public class ProjectPublicityController {
     }
 
     @PostMapping("updateProjectPublicity")
-    public ResponseEntity<?> updateProjectPublicity(ProjectPublicity projectPublicity){
+    public ResponseEntity<?> updateProjectPublicity(@RequestBody @Validated ProjectPublicity projectPublicity){
         if(!projectPublicityService.updateProjectPublicity(projectPublicity)){
             return ResponseEntity.createFromEnum(CustomResponseEnum.UPDATE_PROJECTPUBLICITY_NO);
         }
