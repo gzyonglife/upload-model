@@ -9,7 +9,7 @@ import com.jinlong.uploadmodel.config.exception.HttpBusinessException;
  * @time: 2020/5/20 11:19
  */
 public enum CustomExceptionEnum {
-    //404 not find
+
     NOT_FIND(new HttpBusinessException("该资源未找到", 404)),
     TOKEN_OVERDUE(new HttpBusinessException("token过期", 401)),
     TOKEN_ERROR(new HttpBusinessException("token错误", 400)),

@@ -21,7 +21,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.constraints.NotNull;
@@ -77,7 +76,6 @@ public class ProjectController {
      * @param userDetails
      * @return
      */
-    //@PreAuthorize("hasAnyAuthority('SUPERADMIN','ADMIN')")
     @GetMapping("/getProject/all")
     public ResponseEntity<?> getProjectListOfPage(
             Integer type,
@@ -88,14 +86,6 @@ public class ProjectController {
         pageVo.setCurrent(current);
         pageVo.setSize(size);
         PageVo<ProjectVo> result;
-        // 判断是否为超级管理员
-//        if (userDetails.hasRole("SUPERADMIN")) {
-//            // 查询所有项目
-//            // 查询属于自己的项目
-//
-//        } else {
-//            result = projectService.getProjectListOfPage(pageVo, userDetails.getId());
-//        }
         result = projectService.getProjectListOfPage(pageVo,type);
         if (result == null || result.getData().isEmpty()) {
             return ResponseEntity.createFromEnum(CustomResponseEnum.GET_PROJECT_LIST_FAILURE);
@@ -115,7 +105,6 @@ public class ProjectController {
                     vo.setProjectParentName(projectService.getProjectById(vo.getProjectParent()).get().getProjectName());
                 }
             }
-
             list.add(vo);
         }
         result.setData(list);
@@ -134,21 +123,9 @@ public class ProjectController {
      * @param userDetails
      * @return
      */
-    //@PreAuthorize("hasAnyAuthority('SUPERADMIN','ADMIN')")
     @PostMapping("add")
     public ResponseEntity<?> addProject(@RequestBody @Validated ProjectVo projectVo, @AuthenticationPrincipal UserDetails userDetails) {
         ProjectVo result;
-        // 判断是否为超级管理员
-//        if (userDetails.hasRole("SUPERADMIN")) {
-//            // 判断是否是给自己添加
-//            if (projectVo.getUserId() == null) {
-//                projectVo.setUserId(userDetails.getId());
-//            }
-//            // 直接添加所有信息
-//            result = projectService.addProject(projectVo);
-//        } else {
-//
-//        }
         result = projectService.addProject(projectVo);
         if (result == null) {
             return ResponseEntity.createFromEnum(CustomResponseEnum.CREATE_PROJECT_FAILURE);
@@ -183,90 +160,10 @@ public class ProjectController {
      * @param userDetails
      * @return
      */
-    //@PreAuthorize("hasAnyAuthority('SUPERADMIN','ADMIN')")
     @GetMapping("/getProject/id")
     public ResponseEntity<?> getProjectById(@RequestParam @Validated @NotNull(message = "项目id不得为空") Integer id, @AuthenticationPrincipal UserDetails userDetails) {
-        Optional<ProjectVo> result;
-        // 判断是否为超级管理员
-        if (userDetails.hasRole("SUPERADMIN")) {
-            // 允许查询
-            result = projectService.getProjectById(id);
-        } else {
-            // 查询属于自己的项目
-            result = projectService.getProjectById(id, userDetails.getId());
-        }
         ProjectsVo projectsVo = new ProjectsVo();
-        ProjectVo projectVo = result.get();
-        if (id == null || id == 0) {
-            return ResponseEntity.createFromEnum(CustomResponseEnum.GET_PROJECT_BY_ID_Null);
-        }
-        projectsVo.setProjectName(projectVo.getProjectName());
-        projectsVo.setProjectId(projectVo.getProjectId());
-        projectsVo.setLongitudeAndLatitude(projectVo.getLongitudeAndLatitude());
-        projectsVo.setCateGoryName(projectCategoryService.getProjectCategoryById(projectVo.getProjectCategoryId()).getProjectCategoryName());
-        ProjectDetailsTable projectDetailsTable = projectDetailsTableService.getProjectDetailsTableById(projectVo.getProjectId());
-        List<ProjectPlanTable> projectPlanTableList = projectPlanService.getPlanForProjectIds(projectVo.getProjectId());
-        projectsVo.setBuild(firmTableService.getFirmTableById(projectDetailsTable.getConstructionFirmId()));
-        projectsVo.setAgentConstruction(firmTableService.getFirmTableById(projectDetailsTable.getAgentConstructionFirmId()));
-        projectsVo.setCoordination(firmTableService.getFirmTableById(projectDetailsTable.getCooperateFirmId()));
-        for (ProjectPlanTable planTable : projectPlanTableList) {
-            Calendar cal = Calendar.getInstance();
-            int month = cal.get(Calendar.MONTH) + 1;
-            String plan = "";
-            switch (month) {
-                case 1:
-                    plan = planTable.getProjectPlanJanuary();
-                    break;
-                case 2:
-                    plan = planTable.getProjectPlanFebruary();
-                    break;
-                case 3:
-                    plan = planTable.getProjectPlanMarch();
-                    break;
-                case 4:
-                    plan = planTable.getProjectPlanApril();
-                    break;
-                case 5:
-                    plan = planTable.getProjectPlanMay();
-                    break;
-                case 6:
-                    plan = planTable.getProjectPlanJune();
-                    break;
-                case 7:
-                    plan = planTable.getProjectPlanJuly();
-                    break;
-                case 8:
-                    plan = planTable.getProjectPlanAugust();
-                    break;
-                case 9:
-                    plan = planTable.getProjectPlanSeptember();
-                    break;
-                case 10:
-                    plan = planTable.getProjectPlanOctober();
-                    break;
-                case 11:
-                    plan = planTable.getProjectPlanNovember();
-                    break;
-                case 12:
-                    plan = planTable.getProjectPlanDecember();
-                    break;
-            }
-            if (planTable.getPlanType()) {//计划
-                projectsVo.setProjectTimeOpen(planTable.getProjectPlanExpectStartTime());
-                projectsVo.setProjectTimeDown(planTable.getProjectPlanExpectEndTime());
-                projectsVo.setTarget(plan);
-            } else {//实施
-                projectsVo.setProjectTimeOpens(planTable.getProjectPlanExpectStartTime());
-                projectsVo.setProjectTimeDowns(planTable.getProjectPlanExpectEndTime());
-                projectsVo.setActual(plan);
-            }
-            projectsVo.setKilometers(planTable.getProjectPlanInvestTotal());
-            projectsVo.setKilometersYear(planTable.getProjectPlanInvestFinish());
 
-        }
-        if (!result.isPresent()) {
-            return ResponseEntity.createFromEnum(CustomResponseEnum.GET_PROJECT_BY_ID_FAILURE);
-        }
         return ResponseEntity
                 .builder()
                 .code(CustomResponseEnum.GET_PROJECT_BY_ID_OK.getCode())
@@ -274,7 +171,6 @@ public class ProjectController {
                 .data(projectsVo)
                 .build();
     }
-
     /**
      * 根据分类id获取项目
      *
@@ -348,7 +244,6 @@ public class ProjectController {
             }else {
                 vo.setProjectParentName(" ");
             }
-
             list.add(vo);
         }
         projectVoPageVo.setData(list);
@@ -388,7 +283,6 @@ public class ProjectController {
 
     /**
      * 修改项目信息
-     *
      * @param projectVo
      * @param userDetails
      * @return
@@ -414,8 +308,6 @@ public class ProjectController {
     @PostMapping(value = "/batch_sms_send/parseExcel", produces = {"application/json;charset=UTF-8"})
     public void parseExcel(@RequestParam("file") MultipartFile file,HttpServletRequest request, HttpServletResponse response) {
         try {
-            // @RequestParam("file") MultipartFile file 是用来接收前端传递过来的文件
-            // 1.创建workbook对象，读取整个文档
             InputStream inputStream = file.getInputStream();
             POIFSFileSystem poifsFileSystem = new POIFSFileSystem(inputStream);
             HSSFWorkbook wb = new HSSFWorkbook(poifsFileSystem);
@@ -444,7 +336,6 @@ public class ProjectController {
 
     }
 
-
     @PostMapping("/addUrlImgVideo")
     public ResponseEntity<?> addImgVideo(MultipartFile[] imgFolder,
                                          MultipartFile[] videoFolder,
@@ -455,6 +346,16 @@ public class ProjectController {
                 .code(CustomResponseEnum.UPDATE_PROJECT_IMG_VIDEO_OK.getCode())
                 .message(CustomResponseEnum.UPDATE_PROJECT_IMG_VIDEO_OK.getMessage())
                 .data(projectService.addImgVideo(imgFolder,videoFolder,projectId))
+                .build();
+    }
+
+    @GetMapping("/getProjectByAdministrative")
+    public ResponseEntity<?> getProjectByAdministrative(@RequestParam("administrativeName")String administrativeName){
+        return ResponseEntity
+                .builder()
+                .code(CustomResponseEnum.GET_PROJECT_LIST_OK.getCode())
+                .message(CustomResponseEnum.GET_PROJECT_LIST_OK.getMessage())
+                .data(projectService.getProjectByAdministrative(administrativeName))
                 .build();
     }
 }

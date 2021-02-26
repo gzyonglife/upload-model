@@ -27,4 +27,11 @@ public interface ProjectBeCompletedService {
      * @return
      */
     PageVo<ProjectBeCompletedVo> getProjectBeCompleted(String projectName, Integer current, Integer size);
+
+    /**
+     * 根据项目id查询项目竣工信息
+     * @param projectId
+     * @return
+     */
+    ProjectBeCompletedVo getProjectBeCompletedById(Integer projectId);
 }

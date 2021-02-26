@@ -89,4 +89,14 @@ public class ProjectPublicityServiceImpl implements ProjectPublicityService {
         pagevo.setData(list);
         return pagevo;
     }
+
+    /**
+     * 根据项目id查询项目公示信息
+     * @param projectId
+     * @return
+     */
+    @Override
+    public ProjectPublicity getProjectPublicityById(Integer projectId) {
+        return ProjectPublicityDao.selectOne(new QueryWrapper<ProjectPublicity>().eq("project_id",projectId));
+    }
 }

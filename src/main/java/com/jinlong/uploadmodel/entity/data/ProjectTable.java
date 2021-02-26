@@ -35,11 +35,6 @@ public class ProjectTable implements Serializable {
     private Integer userId;
 
     /**
-     * 项目详情id
-     */
-    private Integer projectDetailsId;
-
-    /**
      * 父级项目id
      */
     private Integer projectParent;
@@ -71,4 +66,9 @@ public class ProjectTable implements Serializable {
      * 视频地址
      */
     private String videoUrl;
+
+    /**
+     *  青浦区行政区域表id
+     */
+    private String administrativeTableId;
 }

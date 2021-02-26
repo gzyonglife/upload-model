@@ -27,4 +27,11 @@ public interface ProjectPublicityService {
      * @return
      */
     PageVo<ProjectPublicityVo> getProjectPublicity(String projectName, Integer current, Integer size);
+
+    /**
+     * 根据项目id查询项目公示信息
+     * @param projectId
+     * @return
+     */
+    ProjectPublicity getProjectPublicityById(Integer projectId);
 }

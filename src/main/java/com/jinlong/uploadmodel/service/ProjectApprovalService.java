@@ -27,4 +27,11 @@ public interface ProjectApprovalService {
      * @return
      */
     Boolean updateProjectApproval(ProjectApproval ProjectApproval);
+
+    /**
+     * 根据项目id查询项目批准情况
+     * @param projectId
+     * @return
+     */
+    ProjectApproval getProjectApprovalById(Integer projectId);
 }

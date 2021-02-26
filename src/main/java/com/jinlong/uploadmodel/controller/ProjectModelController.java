@@ -11,7 +11,6 @@ import com.jinlong.uploadmodel.service.UserService;
 import com.jinlong.uploadmodel.util.CustomResponseEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -40,7 +39,6 @@ public class ProjectModelController {
     @Autowired
     UserService userService;
 
-    //@PreAuthorize("hasAnyAuthority('SUPERADMIN','ADMIN')")
     @ResponseBody
     @PostMapping("/uploadFolder")
     public ResponseEntity<?> uploadFolder(
@@ -82,26 +80,24 @@ public class ProjectModelController {
                 .build();
     }
 
-    @PreAuthorize("hasAnyAuthority('SUPERADMIN','ADMIN')")
     @ResponseBody
     @GetMapping("/getProjectModel/projectId")
     ResponseEntity<?> getProjectModelListByProjectId(
             @RequestParam @Validated @NotNull(message = "项目id不得为空") Integer projectId,
             @AuthenticationPrincipal UserDetails userDetails) {
         // 判断是否有该项目的权限
-        if (userService.hasProject(userDetails, projectId)) {
-            List<ModelShowVo> result = projectModelService.getProjectModelListByProjectId(projectId);
-            return ResponseEntity
-                    .builder()
-                    .code(CustomResponseEnum.GET_PROJECT_MODEL_OK.getCode())
-                    .message(CustomResponseEnum.GET_PROJECT_MODEL_OK.getMessage())
-                    .data(result)
-                    .build();
-        }
-        return ResponseEntity.createFromEnum(CustomResponseEnum.GET_PROJECT_MODEL_FAILURE);
+        //if (userService.hasProject(userDetails, projectId)) {
+        List<ModelShowVo> result = projectModelService.getProjectModelListByProjectId(projectId);
+        return ResponseEntity
+                .builder()
+                .code(CustomResponseEnum.GET_PROJECT_MODEL_OK.getCode())
+                .message(CustomResponseEnum.GET_PROJECT_MODEL_OK.getMessage())
+                .data(result)
+                .build();
+        //}
+        //return ResponseEntity.createFromEnum(CustomResponseEnum.GET_PROJECT_MODEL_FAILURE);
     }
 
-    //@PreAuthorize("hasAnyAuthority('SUPERADMIN','ADMIN')")
     @ResponseBody
     @GetMapping("/getProjectModel/all")
     ResponseEntity<?> getProjectModelList(
@@ -112,7 +108,6 @@ public class ProjectModelController {
         // 判断是否有该项目的权限
         PageVo<ModelShowVo> result = projectModelService.getProjectModelList(type,current,size);
 
-
         return ResponseEntity
                 .builder()
                 .code(CustomResponseEnum.GET_PROJECT_MODEL_OK.getCode())
@@ -121,7 +116,6 @@ public class ProjectModelController {
                 .build();
     }
 
-    //@PreAuthorize("hasAnyAuthority('SUPERADMIN','ADMIN')")
     @ResponseBody
     @PutMapping("/modifyProjectModel/view")
     ResponseEntity<?> modifyProjectModelForView(
@@ -140,7 +134,6 @@ public class ProjectModelController {
                 .build();
     }
 
-    //@PreAuthorize("hasAnyAuthority('SUPERADMIN','ADMIN')")
     @ResponseBody
     @PostMapping("/updateModel")
     ResponseEntity<?> updateModel(@RequestParam(name = "projectModelId") Integer projectModelId,
@@ -160,7 +153,6 @@ public class ProjectModelController {
         return ResponseEntity.createFromEnum(CustomResponseEnum.UPDATE_PROJECT_MODEL_ERROR);
     }
 
-    //@PreAuthorize("hasAnyAuthority('SUPERADMIN','ADMIN')")
     @PostMapping("/getModelId")
     ResponseEntity<?> getModelById(@RequestParam(name = "projectModelId") Integer projectModelId,
                                    @AuthenticationPrincipal UserDetails userDetails) {

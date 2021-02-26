@@ -103,7 +103,13 @@ public enum CustomResponseEnum {
 
     GET_PROJECT_BY_ID_OK(200,"获取项目详情信息成功"),
     GET_PROJECT_BY_ID_Null(501,"项目id缺少或者为0"),
-    GET_PROJECT_BY_ID_FAILURE(404,"获取项目详情信息失败");
+    GET_PROJECT_BY_ID_FAILURE(404,"获取项目详情信息失败"),
+
+    GET_PROJECTAUDIT_BY_TYPE_OK(200,"查询项目审核信息成功"),
+    GET_PROJECTAUDIT_BY_TYPE_ERROR(501,"查询项目审核信息失败(type参数有误)"),
+
+
+    GET_ADMINISTRATIVETABLE_OK(200,"获取行政区域成功");
 
 
 

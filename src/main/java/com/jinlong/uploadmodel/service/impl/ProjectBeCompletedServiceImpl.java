@@ -100,4 +100,24 @@ public class ProjectBeCompletedServiceImpl implements ProjectBeCompletedService 
         pagevo.setData(list);
         return pagevo;
     }
+
+    /**
+     * 根据项目id查询项目竣工信息
+     * @param projectId
+     * @return
+     */
+    @Override
+    public ProjectBeCompletedVo getProjectBeCompletedById(Integer projectId) {
+        ProjectBeCompleted projectBeComplete = projectBeCompletedDao.selectOne(new QueryWrapper<ProjectBeCompleted>().eq("project_id",projectId));
+        ProjectBeCompletedVo projectBeCompletedVo = BeanBeanHelpUtils.copyProperties(projectBeComplete,ProjectBeCompletedVo.class);
+        FirmTable firmTable = firmTableDao.selectById(projectBeCompletedVo.getConstructionUnit());
+        if(firmTable!=null){
+            projectBeCompletedVo.setFirmName(firmTable.getFirmName());
+            projectBeCompletedVo.setFirmPhone(firmTable.getFirmPhone());
+        }else{
+            projectBeCompletedVo.setFirmName("单位已被删除");
+            projectBeCompletedVo.setFirmPhone("单位已被删除");
+        }
+        return projectBeCompletedVo;
+    }
 }

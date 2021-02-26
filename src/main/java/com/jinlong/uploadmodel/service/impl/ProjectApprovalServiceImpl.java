@@ -90,4 +90,14 @@ public class ProjectApprovalServiceImpl implements ProjectApprovalService {
     public Boolean updateProjectApproval(ProjectApproval ProjectApproval) {
         return projectApprovalDao.updateById(ProjectApproval)==1?true:false;
     }
+
+    /**
+     * 根据项目id查询项目批准情况
+     * @param projectId
+     * @return
+     */
+    @Override
+    public ProjectApproval getProjectApprovalById(Integer projectId) {
+        return projectApprovalDao.selectOne(new QueryWrapper<ProjectApproval>().eq("project_id",projectId));
+    }
 }

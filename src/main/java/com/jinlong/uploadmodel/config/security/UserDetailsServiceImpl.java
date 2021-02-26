@@ -56,7 +56,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             // 有该key 且未过期
             UserDetails userDetails = redisTokenUtils.pullJwtUserById(id);
             // 校验对象是否存在
-            Assert.assertNotNull(userDetails, CustomExceptionEnum.TOKEN_ERROR);
+            //Assert.assertNotNull(userDetails, CustomExceptionEnum.TOKEN_ERROR);
             return userDetails;
         }
         return null;

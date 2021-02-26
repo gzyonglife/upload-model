@@ -6,6 +6,7 @@ import lombok.Data;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @description: ProjectVo
@@ -31,10 +32,6 @@ public class ProjectVo {
      */
     private Integer userId;
 
-    /**
-     * 项目详情id
-     */
-    private Integer projectDetailsId;
     /**
      * 父级项目id
      */
@@ -74,4 +71,14 @@ public class ProjectVo {
      * 视频地址
      */
     private String videoUrl;
+
+    /**
+     *  青浦区行政区域表id
+     */
+    private String administrativeTableId;
+
+    /**
+     *  青浦区行政区域名称
+     */
+    private List<String> administrativeTableName;
 }

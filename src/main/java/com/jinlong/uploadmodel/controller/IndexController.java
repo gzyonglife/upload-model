@@ -6,7 +6,6 @@ import com.jinlong.uploadmodel.service.*;
 import com.jinlong.uploadmodel.util.BeanBeanHelpUtils;
 import com.jinlong.uploadmodel.util.CustomResponseEnum;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -50,7 +49,6 @@ public class IndexController {
 
     @Autowired
     ProjectService projectService;
-    @PreAuthorize("hasAnyAuthority('SUPERADMIN','ADMIN')")
     @GetMapping("getProjectCategory/all")
     public ResponseEntity<?> getStatisticsProjectType() {
         IndexVo indexVo = new IndexVo();
@@ -78,6 +76,7 @@ public class IndexController {
                     getAdministrativeTableId(administrativeTableBindingAdministrativeTable.getAdministrativeTableId()).
                     getAdministrativeName());
             overviewAdministrativePlanProjectVo.setAdministrativeName(administrativePlanService.getAdministrativePlanById(administrativeTableBindingAdministrativeTable.getAdministrativePlanId()).getAdministrativePlanName());
+            overviewAdministrativePlanProjectVo.setOverviewAdministrativePlanProjectNum(projectService.getProjectByAdministrative(overviewAdministrativePlanProjectVo.getAdministrativeTableBindingAdministrativeTableName()).size());
             overviewAdministrativePlanProjectVoList.add(overviewAdministrativePlanProjectVo);
         }
         for(OverviewYearPlan list:overviewYearPlanList){
@@ -88,10 +87,12 @@ public class IndexController {
         }
         List<ProjectTable> projectTableList = projectService.getProjectByFoucus();
         List<ProjectVo> projectVoList = new ArrayList<ProjectVo>();
-        for(ProjectTable list:projectTableList){
-            ProjectVo projectVo = BeanBeanHelpUtils.copyProperties(list, ProjectVo.class);
-            projectVo.setProjectClassTableName(projectCategoryService.getProjectCategoryById(list.getProjectCategoryId()).getProjectCategoryName());
-            projectVoList.add(projectVo);
+        if(projectTableList!=null){
+            for(ProjectTable list:projectTableList){
+                ProjectVo projectVo = BeanBeanHelpUtils.copyProperties(list, ProjectVo.class);
+                projectVo.setProjectClassTableName(projectCategoryService.getProjectCategoryById(list.getProjectCategoryId()).getProjectCategoryName());
+                projectVoList.add(projectVo);
+            }
         }
         indexVo.addData(statisticsProjectTypeVoList);
         indexVo.addData(overviewAdministrativePlanProjectVoList);

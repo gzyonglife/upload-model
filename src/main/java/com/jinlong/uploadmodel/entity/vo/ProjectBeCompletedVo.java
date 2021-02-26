@@ -65,4 +65,9 @@ public class ProjectBeCompletedVo {
      * 单位名称
      */
     private String firmName;
+
+    /**
+     * 单位名称
+     */
+    private String firmPhone;
 }

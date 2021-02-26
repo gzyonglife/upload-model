@@ -66,14 +66,6 @@ public interface ProjectService {
      */
     ProjectVo addProject(ProjectVo projectVo);
 
-    /**
-     * 判断该项目下是否含有该类型的计划实施信息
-     *
-     * @param projectId
-     * @param planType
-     * @return
-     */
-    boolean hasProjectPlan(Integer projectId, Boolean planType);
 
     /**
      * 根据项目id查询项目信息
@@ -98,7 +90,6 @@ public interface ProjectService {
      * @return
      */
     List<ProjectTable> getProjectByFoucus();
-
 
     /**
      * 搜索并分页获取项目列表
@@ -128,4 +119,18 @@ public interface ProjectService {
     Boolean addImgVideo(MultipartFile[] imgFolder,
                         MultipartFile[] videoFolder,
                         Integer projectId);
+
+    /**
+     * 将ProjectTable 转换 ProjectVo
+     * @param list
+     * @return
+     */
+    List<ProjectVo> setProjectById(List<ProjectTable> list);
+
+    /**
+     * 根据行政区域名称查询
+     * @param administrativeName
+     * @return
+     */
+    List<ProjectVo> getProjectByAdministrative(String administrativeName);
 }

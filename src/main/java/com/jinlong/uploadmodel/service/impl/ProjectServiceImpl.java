@@ -3,12 +3,11 @@ package com.jinlong.uploadmodel.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jinlong.uploadmodel.config.selector.ProjectZoneSelector;
-import com.jinlong.uploadmodel.dao.ProjectDetailsTableDao;
-import com.jinlong.uploadmodel.dao.ProjectTableDao;
-import com.jinlong.uploadmodel.entity.data.ProjectDetailsTable;
-import com.jinlong.uploadmodel.entity.data.ProjectTable;
+import com.jinlong.uploadmodel.dao.*;
+import com.jinlong.uploadmodel.entity.data.*;
 import com.jinlong.uploadmodel.entity.vo.PageVo;
 import com.jinlong.uploadmodel.entity.vo.ProjectVo;
+import com.jinlong.uploadmodel.service.ProjectApprovalService;
 import com.jinlong.uploadmodel.service.ProjectClassTableService;
 import com.jinlong.uploadmodel.service.ProjectService;
 import com.jinlong.uploadmodel.util.Assert;
@@ -38,12 +37,16 @@ public class ProjectServiceImpl implements ProjectService {
     ProjectTableDao projectDao;
 
     @Autowired
-    ProjectDetailsTableDao projectDetailsDao;
-
-    @Autowired
     ProjectZoneSelector projectZoneSelector;
 
+    @Autowired
+    ProjectPlanTableDao projectPlanTableDao;
 
+    @Autowired
+    ProjectCategoryTableDao projectCategoryTableDao;
+
+    @Autowired
+    AdministrativeTableDao administrativeTableDao;
 
     /**
      * 获取项目列表
@@ -173,23 +176,6 @@ public class ProjectServiceImpl implements ProjectService {
         return null;
     }
 
-    /**
-     * 判断该项目下是否含有该类型的计划实施信息
-     *
-     * @param projectId
-     * @param planType
-     * @return
-     */
-    @Override
-    public boolean hasProjectPlan(Integer projectId, Boolean planType) {
-        ProjectTable projectTable = projectDao.selectById(projectId);
-        Integer projectDetailsId = projectTable.getProjectDetailsId();
-        ProjectDetailsTable projectDetailsTable = projectDetailsDao.selectById(projectId);
-        if (planType) {
-            return projectDetailsTable.getProjectPlanId() == null;
-        }
-        return projectDetailsTable.getProjectPlanPracticalId() == null;
-    }
 
     /**
      * 根据项目id查询项目信息
@@ -248,6 +234,24 @@ public class ProjectServiceImpl implements ProjectService {
         if (name != null) {
             projectTableQueryWrapper.like("project_name", name);
         }
+
+        List<Integer> idList = Collections.emptyList();
+        QueryWrapper<ProjectPlanTable> projectPlanQueryWrapper = new QueryWrapper<ProjectPlanTable>().select("distinct project_id");
+        if(year!=null){
+            projectPlanQueryWrapper.eq("project_plan_year",year+"-01-01");
+            List<ProjectPlanTable> list = projectPlanTableDao.selectList(projectPlanQueryWrapper);
+            if(!list.isEmpty()){
+                idList = new ArrayList<>(list.size());
+                for(ProjectPlanTable projectPlanTable : list){
+                    idList.add(projectPlanTable.getProjectId());
+                }
+            }
+
+            if(!idList.isEmpty()){
+                projectTableQueryWrapper.lambda().in(ProjectTable::getProjectId, idList);
+            }
+        }
+
 
 
         projectTableQueryWrapper.setEntity(projectTable);
@@ -335,10 +339,83 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    public List<ProjectVo> setProjectById(List<ProjectTable> list) {
+        List<ProjectVo> projectVoList = new ArrayList<>();
+        if(!list.isEmpty()){
+            for(ProjectTable projectTable : list){
+                ProjectVo projectVo = BeanBeanHelpUtils.copyProperties(projectTable,ProjectVo.class);
+                if(projectTable.getProjectCategoryId()!=null&&projectTable.getProjectCategoryId()!=0){
+                    projectVo.setProjectClassTableName(
+                            projectCategoryTableDao.selectById(projectTable.getProjectCategoryId()).
+                                    getProjectCategoryName());
+                }
+                if(projectTable.getProjectParent()!=null&&projectTable.getProjectParent()!=0){
+                    projectVo.setProjectParentName(
+                            projectDao.selectById(projectTable.getProjectParent())
+                            .getProjectName()
+                    );
+                }
+                //青浦区行政区域名称没写
+//                if(projectTable.getAdministrativeTableId()!=null&&projectTable.getAdministrativeTableId()!=0){
+//                    projectVo.setAdministrativeTableName(
+//                            administrativeTableDao.selectById(projectTable.getAdministrativeTableId())
+//                            .getAdministrativeName()
+//                    );
+//                }
+                projectVoList.add(projectVo);
+            }
+        }else{
+            return null;
+        }
+        return projectVoList;
+    }
+
+    /**
+     * 根据行政区域名称查询
+     * @param administrativeName
+     * @return
+     */
+    @Override
+    public List<ProjectVo> getProjectByAdministrative(String administrativeName) {
+        List<ProjectTable> list = projectDao.selectList(new QueryWrapper<ProjectTable>());
+        List<ProjectVo> listProVo = new ArrayList<>();
+        for(ProjectTable projectTable : list){
+            if(projectTable.getAdministrativeTableId()!=null&&!projectTable.getAdministrativeTableId().equals("")){
+                String str[] = projectTable.getAdministrativeTableId().split(",");
+                int[] array = Arrays.stream(str).mapToInt(Integer::parseInt).toArray();
+                for(int i : array){
+                    AdministrativeTable administrativeTable = administrativeTableDao.selectById(i);
+                    if(administrativeTable.getAdministrativeName().equals(administrativeName)){
+                        listProVo.add(BeanBeanHelpUtils.copyProperties(projectTable,ProjectVo.class));
+                    }
+                }
+            }
+        }
+        return listProVo;
+    }
+
+    /**
+     * 查询今年所有的重点关注项目
+     * @return
+     */
+    @Override
     public List<ProjectTable> getProjectByFoucus() {
-        Map<String,Object> map = new HashMap<String,Object>();
-        map.put("is_focus",1);
-        List<ProjectTable> list = projectDao.selectByMap(map);
-        return list;
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        List<ProjectPlanTable> list = projectPlanTableDao.selectList(new QueryWrapper<ProjectPlanTable>()
+                .eq("is_focus", 1)
+                .eq("project_plan_year",year+"-01-01"));
+        List<Integer> idList = Collections.emptyList();
+        if(!list.isEmpty()){
+            idList = new ArrayList<>(idList.size());
+            for(ProjectPlanTable projectPlanTable : list){
+                idList.add(projectPlanTable.getProjectId());
+            }
+        }else{
+            return null;
+        }
+        List<ProjectTable> projectList = projectDao.selectList(new QueryWrapper<ProjectTable>().lambda()
+                .in(idList!=null&&!idList.isEmpty(),ProjectTable::getProjectId, idList));
+        return projectList;
     }
 }
